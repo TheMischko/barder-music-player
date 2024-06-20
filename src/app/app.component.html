@@ -1,0 +1,54 @@
+<div class="container">
+  <h1>Welcome to Tauri + Angular!</h1>
+  <div class="row">
+    <a href="https://tauri.app" target="_blank">
+      <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
+    </a>
+    <a href="https://angular.io" target="_blank">
+      <img src="/assets/angular.svg" class="logo angular" alt="Angular logo" />
+    </a>
+  </div>
+  <p>Click on the logos to learn more about the frameworks</p>
+
+  <form class="row" (submit)="greet($event, greetInput.value)">
+    <input #greetInput id="greet-input" placeholder="Enter a name..." />
+    <button type="submit">Greet</button>
+  </form>
+  <p>{{ greetingMessage }}</p>
+  <div
+    style="
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      width: 50%;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    "
+  >
+    <app-button color="primary" type="fill">Test</app-button>
+    <app-button color="secondary" type="fill">Test</app-button>
+    <app-button color="danger" type="fill">Test</app-button>
+
+    <app-button color="primary" type="outline">Test</app-button>
+    <app-button color="secondary" type="outline">Test</app-button>
+    <app-button color="danger" type="outline">Test</app-button>
+
+    <app-button color="primary" type="plain">Test</app-button>
+    <app-button color="secondary" type="plain">Test</app-button>
+    <app-button color="danger" type="plain">Test</app-button>
+
+    <app-button color="primary" type="fill" [circular]="true">T</app-button>
+    <app-button color="secondary" type="outline" [circular]="true"
+      >T</app-button
+    >
+    <app-button color="danger" type="plain" [circular]="true">T</app-button>
+    <app-button color="primary" type="fill" [circular]="true"
+      ><ng-icon name="heroPlaySolid"></ng-icon
+    ></app-button>
+    <app-button color="danger" type="plain" [circular]="true"
+      ><ng-icon name="heroPlaySolid"></ng-icon>
+    </app-button>
+  </div>
+</div>
+<app-player></app-player>

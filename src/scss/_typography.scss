@@ -1,0 +1,22 @@
+$font: Inter, Avenir, Helvetica, Arial, sans-serif;
+
+@mixin typo-text {
+  font-family: $font;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@mixin typo-button {
+  font-family: $font;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+@mixin typo-button-icon {
+  font-family: $font;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}

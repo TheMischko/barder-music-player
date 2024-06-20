@@ -1,0 +1,43 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "src",
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "target": "ES2022",
+    "types": ["jasmine", "node"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2019",
+      "dom",
+      "esnext.array"
+    ],
+    "paths": {
+      "@services/*": [
+        "./app/services/*"
+      ],
+      "@models/*": [
+        "./app/DataModels/*"
+      ],
+      "@shared/*": [
+        "./app/shared/*"
+      ],
+      "@assets/*": [
+        "./assets/*"
+      ]
+    },
+    "module": "es2020",
+    "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false
+  },
+  "include": [
+    "./app/**/*"
+  ]
+}

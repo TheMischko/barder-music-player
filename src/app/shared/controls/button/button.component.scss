@@ -1,0 +1,90 @@
+@import "../../../../scss/colors";
+@import "../../../../scss/typography";
+
+@mixin btn-fill($bgCol, $textCol) {
+  background: $bgCol;
+  color: $textCol;
+
+  &:hover {
+    background-color: darken($bgCol, 10);
+  }
+}
+
+@mixin btn-outline($borderCol) {
+  background: none;
+  border: 2px solid;
+
+  border-color: $borderCol;
+  color: $borderCol;
+
+  &:hover {
+    border-color: darken($borderCol, 10);
+    background-color: transparentize($borderCol, 0.95);
+  }
+}
+
+@mixin btn-plain($col) {
+  background: none;
+  border: none;
+  color: $col;
+
+  &:hover {
+    background-color: transparentize($col, 0.95);
+    border-radius: 50%;
+  }
+}
+
+button {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+
+  @include typo-button();
+
+  &.circular {
+    border-radius: 100% !important;
+    padding: 10px 12px;
+  }
+  &.style-fill {
+    &.col-primary {
+      @include btn-fill($color-primary, $color-white);
+    }
+    &.col-secondary {
+      @include btn-fill($color-secondary, $color-white);
+    }
+    &.col-danger {
+      @include btn-fill($color-danger, $color-white);
+    }
+  }
+
+  &.style-outline {
+    &.col-primary {
+      @include btn-outline($color-primary);
+    }
+    &.col-secondary {
+      @include btn-outline($color-secondary);
+    }
+    &.col-danger {
+      @include btn-outline($color-danger);
+    }
+  }
+
+  &.style-plain {
+    &.col-primary {
+      @include btn-plain($color-primary);
+    }
+    &.col-secondary {
+      @include btn-plain($color-secondary);
+    }
+    &.col-danger {
+      @include btn-plain($color-danger);
+    }
+  }
+}
+
+:host ::ng-deep {
+  ng-icon {
+    @include typo-button-icon();
+  }
+}

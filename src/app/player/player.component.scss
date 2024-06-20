@@ -1,0 +1,12 @@
+@import "../../scss/colors";
+.player{
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: fit-content;
+  padding: 1rem 2rem;
+  background: black;
+  border-radius: 1rem;
+}

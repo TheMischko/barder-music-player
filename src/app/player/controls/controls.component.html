@@ -1,0 +1,28 @@
+<div class="controls">
+  <app-button color="primary" type="plain" [circular]="true">Shuffle</app-button>
+  <app-button color="primary" type="plain" [circular]="true">Prev</app-button>
+  <app-button color="primary" type="plain" [circular]="true" (click)="playPauseClicked()">
+      <ng-container *ngIf="playPauseState === 'Play'; else pause">
+          <div>Play</div>
+      </ng-container>
+      <ng-template #pause>
+          Pause
+      </ng-template>
+  </app-button>
+  <app-button color="primary" type="plain" [circular]="true">Next</app-button>
+  <app-button color="primary"
+              type="plain"
+              [circular]="true"
+              [ngSwitch]="loopState"
+              (click)="changeLoopState()">
+      <div *ngSwitchCase="LoopState.None">
+          No Loop
+      </div>
+      <div *ngSwitchCase="LoopState.Current">
+          Loop Current
+      </div>
+      <div *ngSwitchCase="LoopState.Playlist">
+          Loop Playlist
+      </div>
+  </app-button>
+</div>
