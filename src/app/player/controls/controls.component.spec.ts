@@ -65,20 +65,23 @@ describe('ControlsComponent', () => {
   });
 
   describe('change loop state', () => {
-    spyOn(component.loop, 'emit');
+
     it('should rotate from None to Current', () => {
+      spyOn(component.loop, 'emit');
       component.loopState = LoopState.None;
       component.changeLoopState();
       expect(component.loop.emit).toHaveBeenCalledWith(LoopState.Current);
     });
 
     it('should rotate from Current to Playlist', () => {
+      spyOn(component.loop, 'emit');
       component.loopState = LoopState.Current;
       component.changeLoopState();
       expect(component.loop.emit).toHaveBeenCalledWith(LoopState.Playlist);
     });
 
     it('should rotate from Playlist to None', () => {
+      spyOn(component.loop, 'emit');
       component.loopState = LoopState.Playlist;
       component.changeLoopState();
       expect(component.loop.emit).toHaveBeenCalledWith(LoopState.None);

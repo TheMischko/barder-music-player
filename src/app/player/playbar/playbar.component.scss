@@ -1,0 +1,81 @@
+@import "../../../scss/colors";
+@import "../../../scss/typography";
+
+$slider-height: 8px;
+$slider-border-radius: 3px;
+$slider-played-color: $color-primary;
+$slider-not-played-color: grey;
+
+:host input[type="range"]{
+  --playbar-value: 0%;
+}
+.playbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.time{
+  @include typo-text();
+  font-size: 11px;
+  width: fit-content;
+}
+:host ::ng-deep .slider{
+  input[type="range"]{
+
+    -webkit-appearance: none;
+    width: 100%;
+    height: $slider-height;
+    border-radius: $slider-border-radius;
+    background: linear-gradient(
+                    to right,
+                    $slider-played-color 0%,
+                    $slider-played-color var(--playbar-value),
+                    $slider-not-played-color var(--playbar-value),
+                    $slider-not-played-color 100%
+    );
+    outline: none;
+    padding: 0;
+    opacity: 0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+
+    &:hover{
+      opacity: 1;
+      &::-webkit-slider-thumb{
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1rem;
+        height: calc($slider-height + $slider-height);
+        border-radius: 50%;
+        background: #4793AF;
+        cursor: pointer;
+      }
+    }
+
+    &::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      appearance: none;
+      width: 0;
+      height: 0;
+    }
+
+    &::-moz-range-track {
+      width: 100%;
+      height: $slider-height;
+      cursor: pointer;
+      animate: 0.2s;
+      border-radius: $slider-border-radius;
+    }
+
+    &::-webkit-slider-runnable-track, &::-ms-track{
+      width: 100%;
+      height: $slider-height;
+      cursor: pointer;
+      animate: .2s;
+      border-radius: $slider-border-radius;
+      border-color: transparent;
+      color: transparent;
+    }
+  }
+}

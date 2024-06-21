@@ -1,0 +1,15 @@
+<div class="playbar">
+    <span class="time">
+        {{playedLengthTime}}
+    </span>
+    <div class="slider">
+        <input #sliderInput
+               type="range"
+               min="0"
+               [max]="trackLengthMillis"
+               [formControl]="sliderValue">
+    </div>
+    <span class="time">
+        {{trackLengthTime}}
+    </span>
+</div>
