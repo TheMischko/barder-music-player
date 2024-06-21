@@ -1,16 +1,11 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
   Input,
-  OnDestroy,
-  OnInit,
-  Output,
   ViewChild
 } from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ValueChangeEvent} from "@angular/forms";
-import {Subscription} from "rxjs";
+import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: 'app-slider',
