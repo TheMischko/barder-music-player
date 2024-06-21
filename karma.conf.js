@@ -28,10 +28,10 @@ module.exports = function (config) {
     files: [
       { pattern: './src/test.ts', watched: false }
     ],
-    exclude: [],
-    preprocessors: {
-      './src/test.ts': ['@angular-devkit/build-angular']
+    mime: {
+      'text/x-typescript': ['ts', 'tsx']
     },
+    exclude: [],
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
