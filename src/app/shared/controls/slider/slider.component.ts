@@ -28,7 +28,7 @@ export class SliderComponent implements AfterViewInit{
   value: number = 0;
   disabled: boolean = false;
 
-  private onChange: any = (value: number) => {};
+  private onChange: any = (_: number) => {};
   private onTouched: any = () => {};
 
   ngAfterViewInit(){

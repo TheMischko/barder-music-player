@@ -12,7 +12,6 @@ import {
   ionPlayBack,
   ionPlayForward,
   ionShuffle, ionVolumeHighSharp,
-  ionVolumeMediumSharp,
   ionVolumeMuteSharp
 } from "@ng-icons/ionicons";
 import {heroArrowPathRoundedSquare} from "@ng-icons/heroicons/outline";
