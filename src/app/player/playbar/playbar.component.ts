@@ -35,7 +35,6 @@ export class PlaybarComponent implements OnInit, OnDestroy{
     this.subscriptions.push(progressSubscription);
 
     const sliderSubscription = this.sliderValue.valueChanges.subscribe(value => {
-      console.log(value);
       this.seek.emit(value);
     });
     this.subscriptions.push(sliderSubscription);

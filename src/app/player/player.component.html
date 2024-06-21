@@ -1,9 +1,16 @@
 <div class="player">
-    <div class="player-col">
-        Cobblestone village
+    <div class="player-col title-col">
+        <a class="song-title player-text unselectable">
+            {{ songTitle }}
+        </a>
+        <a class="song-playlist player-text unselectable">
+            {{ songPlaylist }}
+        </a>
     </div>
     <div class="player-col central-col">
-        <app-controls></app-controls>
+        <app-controls (play)="onPlay()"
+                      (pause)="onPause()"
+        ></app-controls>
         <app-playbar></app-playbar>
     </div>
     <div class="player-col">

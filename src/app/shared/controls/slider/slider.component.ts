@@ -36,7 +36,10 @@ export class SliderComponent implements AfterViewInit{
   }
 
   public writeValue(value: number): void{
-    this.value = value;
+    if(value !== undefined){
+      this.value = value;
+      this.updateSliderBackground();
+    }
   }
 
   public registerOnChange(fn: any): void{
@@ -62,6 +65,9 @@ export class SliderComponent implements AfterViewInit{
   }
 
   private updateSliderBackground(){
+    if(!this.slider?.nativeElement){
+      return;
+    }
     const percentage = (this.value / this.max) * 100;
     this.slider.nativeElement.style.setProperty('--playbar-value', `${percentage}%`);
   }
