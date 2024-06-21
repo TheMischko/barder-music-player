@@ -1,0 +1,11 @@
+<input #sliderInput
+       class="slider"
+       type="range"
+       [min]="min"
+       [max]="max"
+       [step]="stepSize"
+       [disabled]="disabled"
+       [(ngModel)]="value"
+       (change)="onSliderChange($event)"
+       (blur)="onBlur()"
+>

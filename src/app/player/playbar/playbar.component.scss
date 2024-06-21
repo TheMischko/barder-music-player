@@ -1,7 +1,7 @@
 @import "../../../scss/colors";
 @import "../../../scss/typography";
 
-$slider-height: 8px;
+$slider-height: 6px;
 $slider-border-radius: 3px;
 $slider-played-color: $color-primary;
 $slider-not-played-color: grey;
@@ -10,23 +10,22 @@ $slider-not-played-color: grey;
   --playbar-value: 0%;
 }
 .playbar{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 4rem 1fr 4rem;
+  width: 40vw;
+  text-align: center;
 }
 .time{
   @include typo-text();
   font-size: 14px;
-  width: fit-content;
   color: $color-primary;
 }
 :host ::ng-deep .slider{
+  width: 100%;
   input[type="range"]{
-
     -webkit-appearance: none;
-    width: 100%;
     height: $slider-height;
+    width: 100%;
     border-radius: $slider-border-radius;
     background: linear-gradient(
                     to right,

@@ -35,8 +35,8 @@ export class PlaybarComponent implements OnInit, OnDestroy{
     this.subscriptions.push(progressSubscription);
 
     const sliderSubscription = this.sliderValue.valueChanges.subscribe(value => {
+      console.log(value);
       this.seek.emit(value);
-      this.updateSliderBackground(value);
     });
     this.subscriptions.push(sliderSubscription);
   }
@@ -51,11 +51,6 @@ export class PlaybarComponent implements OnInit, OnDestroy{
 
   get playedLengthTime(): string{
     return this.convertMillisToTime(Number(this.sliderValue.value));
-  }
-
-  private updateSliderBackground(value: number){
-    const percentage = (value / this.trackLengthMillis) * 100;
-    this.slider.nativeElement.style.setProperty('--playbar-value', `${percentage}%`);
   }
 
   private convertMillisToTime(milliseconds: number): string{

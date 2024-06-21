@@ -3,11 +3,12 @@
         {{playedLengthTime}}
     </span>
     <div class="slider">
-        <input #sliderInput
-               type="range"
-               min="0"
+        <app-slider
+               [min]="0"
                [max]="trackLengthMillis"
-               [formControl]="sliderValue">
+               [stepSize]="1"
+               [formControl]="sliderValue"
+        />
     </div>
     <span class="time">
         {{trackLengthTime}}

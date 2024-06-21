@@ -31,6 +31,9 @@
       ],
       "@assets/*": [
         "./assets/*"
+      ],
+      "@styles/*": [
+        "./scss/*"
       ]
     },
     "module": "es2020",
