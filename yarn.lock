@@ -1931,6 +1931,13 @@
   dependencies:
     tslib "^2.2.0"
 
+"@ng-icons/ionicons@^28.0.0":
+  version "28.0.0"
+  resolved "https://registry.yarnpkg.com/@ng-icons/ionicons/-/ionicons-28.0.0.tgz#75cfef8516eefb48b6ca915891fab1729a012583"
+  integrity sha512-gxkLaJY7FQEKytULXRlyPtFC7XQWlUjTSQffnYhe9wZrv2W9gyfzphrp1kTBZ9cjEvBHnP+tjzQieK2cIfN8eg==
+  dependencies:
+    tslib "^2.2.0"
+
 "@ngtools/webpack@18.0.5":
   version "18.0.5"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-18.0.5.tgz#a0fc38bdebf951644cf5c707f93be0d3faaded67"
