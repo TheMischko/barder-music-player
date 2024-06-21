@@ -17,8 +17,9 @@ $slider-not-played-color: grey;
 }
 .time{
   @include typo-text();
-  font-size: 11px;
+  font-size: 14px;
   width: fit-content;
+  color: $color-primary;
 }
 :host ::ng-deep .slider{
   input[type="range"]{

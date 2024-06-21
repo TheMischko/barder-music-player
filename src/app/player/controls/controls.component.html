@@ -1,23 +1,23 @@
 <div class="controls">
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionShuffle"></ng-icon>
+      <ng-icon name="ionShuffle" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionPlayBack"></ng-icon>
+      <ng-icon name="ionPlayBack" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true" (click)="playPauseClicked()">
       <ng-container *ngIf="playPauseState === 'Play'; else pause">
-          <ng-icon name="ionPlay"></ng-icon>
+          <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
       </ng-container>
       <ng-template #pause>
-          <ng-icon name="ionPause"></ng-icon>
+          <ng-icon name="ionPause" class="controls-icon"></ng-icon>
       </ng-template>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionPlayForward"></ng-icon>
+      <ng-icon name="ionPlayForward" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-button color="primary"
@@ -26,13 +26,13 @@
               [ngSwitch]="loopState"
               (click)="changeLoopState()">
       <div *ngSwitchCase="LoopState.None">
-          <ng-icon name="heroArrowPathRoundedSquare"></ng-icon>
+          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
       </div>
       <div *ngSwitchCase="LoopState.Current">
-          <ng-icon name="heroArrowPathRoundedSquare"></ng-icon>
+          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
       </div>
       <div *ngSwitchCase="LoopState.Playlist">
-          <ng-icon name="heroArrowPathRoundedSquare"></ng-icon>
+          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
       </div>
   </app-button>
 </div>
