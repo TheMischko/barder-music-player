@@ -1,4 +1,14 @@
 <div class="player">
-    <app-controls></app-controls>
-    <app-playbar></app-playbar>
+    <div class="player-col">
+        Cobblestone village
+    </div>
+    <div class="player-col central-col">
+        <app-controls></app-controls>
+        <app-playbar></app-playbar>
+    </div>
+    <div class="player-col">
+        <app-volume-slider
+            [initialValue]="100"
+        ></app-volume-slider>
+    </div>
 </div>

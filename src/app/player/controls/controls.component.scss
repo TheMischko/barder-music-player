@@ -3,6 +3,11 @@
   flex-direction: row;
   gap: 0.5rem;
   ng-icon.controls-icon{
-    --ng-icon__size: 1.75rem !important;
+    --ng-icon__size: 1.5rem !important;
   }
+
+}
+
+:host ::ng-deep .controls button.circular{
+  padding: 7px 9px;
 }

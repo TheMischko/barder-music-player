@@ -1,0 +1,17 @@
+<div class="volume-slider">
+    <app-button color="primary" type="plain" circular (click)="onMuteClick()">
+        <ng-container *ngIf="muted; else unmuted">
+            <ng-icon name="ionVolumeMuteSharp"></ng-icon>
+        </ng-container>
+        <ng-template #unmuted>
+            <ng-icon name="ionVolumeHighSharp"></ng-icon>
+        </ng-template>
+
+    </app-button>
+    <app-slider
+        [min]="0"
+        [max]="100"
+        [stepSize]="1"
+        [formControl]="volumeControl"
+    ></app-slider>
+</div>

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
@@ -17,7 +18,7 @@ import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
     multi: true
   }]
 })
-export class SliderComponent {
+export class SliderComponent implements AfterViewInit{
   @Input() max: number = 1;
   @Input() min: number = 0;
   @Input() stepSize: number = 1;
@@ -29,6 +30,10 @@ export class SliderComponent {
 
   private onChange: any = (value: number) => {};
   private onTouched: any = () => {};
+
+  ngAfterViewInit(){
+    this.updateSliderBackground();
+  }
 
   public writeValue(value: number): void{
     this.value = value;
