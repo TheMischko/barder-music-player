@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { VolumeSliderComponent } from './volume-slider.component';
+import {SliderComponent} from "@shared/controls/slider/slider.component";
+import {ButtonComponent} from "@shared/controls/button/button.component";
+import {PlayerModule} from "../../player.module";
 
 describe('VolumeSliderComponent', () => {
   let component: VolumeSliderComponent;
@@ -8,7 +10,8 @@ describe('VolumeSliderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VolumeSliderComponent]
+      declarations: [VolumeSliderComponent, SliderComponent, ButtonComponent],
+      imports: [PlayerModule],
     })
     .compileComponents();
 

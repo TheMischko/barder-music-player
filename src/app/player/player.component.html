@@ -1,15 +1,15 @@
 <div class="player">
     <div class="player-col title-col">
         <a class="song-title player-text unselectable">
-            {{ songTitle }}
+            {{ playingSong?.title }}
         </a>
         <a class="song-playlist player-text unselectable">
-            {{ songPlaylist }}
+            {{ playingSong?.playlist }}
         </a>
     </div>
     <div class="player-col central-col">
-        <app-controls (play)="onPlay()"
-                      (pause)="onPause()"
+        <app-controls (play)="onPlayClick()"
+                      (pause)="onPauseClick()"
         ></app-controls>
         <app-playbar></app-playbar>
     </div>

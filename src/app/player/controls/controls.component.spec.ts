@@ -1,7 +1,8 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {ControlsComponent} from './controls.component';
 import {LoopState} from "../player.component.model";
+import {ButtonComponent} from "@shared/controls/button/button.component";
+import {PlayerModule} from "../player.module";
 
 describe('ControlsComponent', () => {
   let component: ControlsComponent;
@@ -9,7 +10,8 @@ describe('ControlsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ControlsComponent]
+      declarations: [ControlsComponent, ButtonComponent],
+      imports: [PlayerModule]
     })
     .compileComponents();
     
