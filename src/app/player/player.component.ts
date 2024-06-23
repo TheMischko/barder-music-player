@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProgressService} from "./progress.service";
 import {PlayerService} from "@services/player.service";
 import {PlaybackSettingsService} from "@services/playback-settings.service";
 import {Subscription} from "rxjs";
-import {Song, SongProgress} from "../models/music";
+import {Song} from "../models/music";
 
 @Component({
   selector: 'app-player',
@@ -44,13 +43,11 @@ export class PlayerComponent implements OnInit,OnDestroy{
     }
   ]
 
-  constructor(private progressService: ProgressService,
-              private playerService: PlayerService,
+  constructor(private playerService: PlayerService,
               private playbackSettings: PlaybackSettingsService) {}
 
   ngOnInit() {
     this.subscriptions.push(this.playerService.onStartPlaying.subscribe((val) => this.onStartPlaying(val)))
-    this.subscriptions.push(this.playerService.onPlaying.subscribe((val) => this.onPlaying(val)));
     this.playerService.setPlaylist(this.playlist, 0);
     this.playingSong = this.playlist[0];
   }
@@ -75,9 +72,5 @@ export class PlayerComponent implements OnInit,OnDestroy{
     this.playingSong = song;
     this.playing = true;
     console.log(song);
-  }
-
-  private onPlaying(progress: SongProgress){
-    this.progressService.updatePlayedLengthMillis(progress.position);
   }
 }

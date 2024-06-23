@@ -11,7 +11,7 @@
         <app-controls (play)="onPlayClick()"
                       (pause)="onPauseClick()"
         ></app-controls>
-        <app-playbar [trackLengthMillis]="playingSong?.duration" (seek)="onSeek($event)"></app-playbar>
+        <app-playbar (seek)="onSeek($event)"></app-playbar>
     </div>
     <div class="player-col">
         <app-volume-slider

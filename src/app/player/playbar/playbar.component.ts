@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -18,11 +17,10 @@ import {ProgressService} from "../progress.service";
   styleUrls: ['./playbar.component.scss']
 })
 export class PlaybarComponent implements OnInit, OnDestroy{
-  @Input() trackLengthMillis: number = 63000;
-  @Input() playedLengthMillis: number = 0;
   @Output() seek = new EventEmitter<number>();
 
   sliderValue = new FormControl(0);
+  trackLengthMillis: number = 1000;
   private subscriptions: Subscription[] = [];
   private changing: boolean = false;
   @ViewChild('sliderInput') private slider: ElementRef<HTMLInputElement>;
@@ -42,6 +40,11 @@ export class PlaybarComponent implements OnInit, OnDestroy{
       this.seek.emit(value);
     });
     this.subscriptions.push(sliderSubscription);
+
+    const trackDurationSubscription = this.progressService.currentDurationMillis$.subscribe(value => {
+      this.trackLengthMillis = value;
+    });
+    this.subscriptions.push(trackDurationSubscription);
   }
 
   ngOnDestroy() {

@@ -4,6 +4,7 @@ import {PlaybackSettingsService} from "@services/playback-settings.service";
 import {interval, Subscription} from "rxjs";
 import {LoopState} from "../player/player.component.model";
 import {Song, SongProgress} from "../models/music";
+import {ProgressService} from "../player/progress.service";
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class PlayerService implements OnDestroy{
   private progressSubscription: Subscription;
   private songEventsAttached: boolean = false;
 
-  constructor(private playbackSettings: PlaybackSettingsService) {
+  constructor(private playbackSettings: PlaybackSettingsService, private progressService: ProgressService) {
     this.settingsSubscriptions.push(
       this.playbackSettings.volume$.subscribe((volume) => {
         if(this.playingSong){
@@ -70,20 +71,16 @@ export class PlayerService implements OnDestroy{
 
   public seek(newPosition: number){
     if(!this.playingSongID){
-      console.log('no song ID');
       return;
     }
     if(this.playingSong.duration() <= newPosition){
-      console.log('seek over max', this.playingSong.duration(), newPosition)
       this.playingSong.seek(this.playingSong.duration() - 100, this.playingSongID);
       return;
     }
     if(newPosition < 0){
-      console.log('seek under zero', newPosition);
       this.playingSong.seek(0, this.playingSongID);
       return;
     }
-    console.log('seek', newPosition);
     this.playingSong.seek(newPosition, this.playingSongID);
   }
 
@@ -114,7 +111,8 @@ export class PlayerService implements OnDestroy{
       });
       this.playingSong.on('play', () => {
         this.onStartPlaying.emit(this.playlist[this.playlistIndex]);
-        this.startProgressTracking()
+        this.progressService.updateCurrentDurationMillis(this.playlist[this.playlistIndex].duration);
+        this.startProgressTracking();
       });
       this.playingSong.on('pause', () => {
         this.onPause.emit();
@@ -133,18 +131,13 @@ export class PlayerService implements OnDestroy{
     this.progressSubscription = interval(this.progressCheckInterval)
       .subscribe(() => {
         if(this.playingSong === undefined){
-          this.onPlaying.emit({
-            position: 0,
-            duration: 0
-          });
+          this.progressService.updatePlayedLengthMillis(0);
           return;
         }
         const position = (this.playingSong.seek() as number)*1000;
         const duration = this.playingSong.duration() * 1000;
-        this.onPlaying.emit({
-          position,
-          duration
-        });
+
+        this.progressService.updatePlayedLengthMillis(position);
 
         if(position/duration >= this.preloadTimePortion){
           this.preloadNextSong();
