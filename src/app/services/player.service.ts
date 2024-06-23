@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
-import {Howl} from "howler";
+import {Howl, HowlOptions} from "howler";
 import {PlaybackSettingsService} from "@services/playback-settings.service";
 import {interval, Subscription} from "rxjs";
 import {LoopState} from "../player/player.component.model";
@@ -20,7 +20,7 @@ export class PlayerService implements OnDestroy{
   private playlist: Song[];
   private playlistIndex: number;
   private readonly progressCheckInterval = 250;
-  private readonly preloadTime = 10_000;
+  private readonly preloadTimePortion = .9;
 
   private settingsSubscriptions: Subscription[] = [];
   private progressSubscription: Subscription;
@@ -72,7 +72,7 @@ export class PlayerService implements OnDestroy{
   private prepareSong(){
     if(this.nextSong === undefined){
       const song = this.playlist[this.playlistIndex];
-      this.playingSong = new Howl({
+      this.playingSong = this.createHowl({
         src: [song.src],
       });
     } else {
@@ -124,7 +124,7 @@ export class PlayerService implements OnDestroy{
           duration
         });
 
-        if(duration - position < this.preloadTime){
+        if(position/duration >= this.preloadTimePortion){
           this.preloadNextSong();
         }
     });
@@ -147,13 +147,13 @@ export class PlayerService implements OnDestroy{
     if(this.playlistIndex < this.playlist.length - 1){
       const nextSongIndex = this.playlistIndex + 1;
       const nextSong = this.playlist[nextSongIndex];
-      this.nextSong = new Howl({
+      this.nextSong = this.createHowl({
         src: [nextSong.src]
       });
       this.nextSong.load();
     } else if(loop === LoopState.Playlist && this.playlistIndex === this.playlist.length - 1){
       const nextSong = this.playlist[0];
-      this.nextSong = new Howl({
+      this.nextSong = this.createHowl({
         src: [nextSong.src]
       });
     }
@@ -166,5 +166,9 @@ export class PlayerService implements OnDestroy{
       this.play();
       this.songEventsAttached = false;
     }
+  }
+
+  createHowl(options: HowlOptions): Howl{
+    return new Howl(options);
   }
 }

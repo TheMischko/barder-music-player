@@ -70,6 +70,7 @@ export class PlayerComponent implements OnInit,OnDestroy{
   private onStartPlaying(song: Song){
     this.playingSong = song;
     this.playing = true;
+    console.log(song);
   }
 
   private onPlaying(progress: SongProgress){

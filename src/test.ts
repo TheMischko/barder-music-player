@@ -1,11 +1,10 @@
 import 'zone.js';
+import 'zone.js/testing';
 import {getTestBed, TestBed} from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
-import {InjectionToken} from "@angular/core";
-import {NgIconsToken} from "@ng-icons/core";
 
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
