@@ -44,6 +44,13 @@ export class PlayerService implements OnDestroy{
           this.playingSong.loop(loop === LoopState.Current);
         }
       })
+    );
+    this.settingsSubscriptions.push(
+      this.playbackSettings.mute$.subscribe((muted: boolean) => {
+        if(this.playingSong){
+          this.playingSong.mute(muted);
+        }
+      })
     )
   }
 
@@ -104,9 +111,11 @@ export class PlayerService implements OnDestroy{
     }
     const loop: boolean = this.playbackSettings.loop$.getValue() === LoopState.Current;
     const volume: number = this.playbackSettings.volume$.getValue();
+    const mute: boolean = this.playbackSettings.mute$.getValue();
 
     this.playingSong.loop(loop);
     this.playingSong.volume(volume);
+    this.playingSong.mute(mute);
 
     if(!this.songEventsAttached) {
       this.playingSong.on('load', () => {

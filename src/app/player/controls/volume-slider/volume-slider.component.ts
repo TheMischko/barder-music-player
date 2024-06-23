@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Subscription} from "rxjs";
+import {PlaybackSettingsService} from "@services/playback-settings.service";
 
 @Component({
   selector: 'app-volume-slider',
@@ -15,27 +16,41 @@ export class VolumeSliderComponent implements OnInit, OnDestroy{
   volumeControl = new FormControl(0);
   muted: boolean = false;
 
-  private changeSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
+
+  constructor(private playbackSettings: PlaybackSettingsService) {
+  }
 
   ngOnInit() {
     this.volumeControl.setValue(this.initialValue);
-    this.changeSubscription = this.volumeControl.valueChanges.subscribe(
-      (val) => {
-        if(this.muted){
-          this.muted = false;
-          this.mute.emit(this.muted);
+    this.subscriptions.push(
+      this.volumeControl.valueChanges.subscribe(
+        (val) => {
+          if(this.muted){
+            this.muted = false;
+            this.mute.emit(this.muted);
+            this.playbackSettings.mute = false;
+          }
+          this.change.emit(val);
+          this.playbackSettings.volume = val;
         }
-        this.change.emit(val)
-      }
+      )
+    )
+    this.subscriptions.push(
+      this.playbackSettings.volume$.subscribe(val => this.volumeControl.setValue(PlaybackSettingsService.parseLogVolumeToLinear(val), {emitEvent: false}))
     );
+    this.subscriptions.push(
+      this.playbackSettings.mute$.subscribe(val => this.muted = val)
+    )
   }
 
   ngOnDestroy() {
-    this.changeSubscription.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   onMuteClick(){
     this.muted = !this.muted;
     this.mute.emit(this.muted);
+    this.playbackSettings.mute = this.muted;
   }
 }
