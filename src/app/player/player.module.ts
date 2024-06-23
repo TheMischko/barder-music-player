@@ -16,9 +16,10 @@ import {
 } from "@ng-icons/ionicons";
 import {heroArrowPathRoundedSquare} from "@ng-icons/heroicons/outline";
 import { VolumeSliderComponent } from './controls/volume-slider/volume-slider.component';
+import { LoopControlComponent } from './controls/loop-control/loop-control.component';
 
 @NgModule({
-  declarations: [PlayerComponent, ControlsComponent, PlaybarComponent, VolumeSliderComponent],
+  declarations: [PlayerComponent, ControlsComponent, PlaybarComponent, VolumeSliderComponent, LoopControlComponent],
   imports: [
     CommonModule,
     SharedModule,

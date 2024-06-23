@@ -1,0 +1,11 @@
+<app-button color="primary"
+            class="loop-control"
+            [type]="loopingActive ? 'fill' : 'plain'"
+            [circular]="true"
+            (click)="rotateNextState()"
+>
+    <div *ngIf="currentState === LoopState.Current" class="current-loop-indicator">
+        1
+    </div>
+    <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
+</app-button>

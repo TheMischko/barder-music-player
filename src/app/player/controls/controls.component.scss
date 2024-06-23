@@ -2,12 +2,18 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  ng-icon.controls-icon{
-    --ng-icon__size: 1.5rem !important;
-  }
+
 
 }
 
-:host ::ng-deep .controls button.circular{
-  padding: 7px 9px;
+:host ::ng-deep .controls {
+  ng-icon.controls-icon{
+    --ng-icon__size: 1.5rem !important;
+  }
+  button.circular {
+    padding: 7px 9px;
+  }
+  button.circular.style-fill {
+    padding: 6px 8px;
+  }
 }

@@ -1,0 +1,12 @@
+@import "../../../../scss/colors";
+.loop-control{
+    position: relative;
+}
+.current-loop-indicator{
+    position: absolute;
+    margin: auto;
+    color: $color-white;
+    font-size: 12px;
+    user-select: none;
+    transform: translate(0, 2px);
+}

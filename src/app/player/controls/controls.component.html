@@ -20,19 +20,5 @@
       <ng-icon name="ionPlayForward" class="controls-icon"></ng-icon>
   </app-button>
 
-  <app-button color="primary"
-              type="plain"
-              [circular]="true"
-              [ngSwitch]="loopState"
-              (click)="changeLoopState()">
-      <div *ngSwitchCase="LoopState.None">
-          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
-      </div>
-      <div *ngSwitchCase="LoopState.Current">
-          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
-      </div>
-      <div *ngSwitchCase="LoopState.Playlist">
-          <ng-icon name="heroArrowPathRoundedSquare" class="controls-icon"></ng-icon>
-      </div>
-  </app-button>
+  <app-loop-control></app-loop-control>
 </div>
