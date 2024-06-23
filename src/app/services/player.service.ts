@@ -21,6 +21,7 @@ export class PlayerService implements OnDestroy{
   private playlistIndex: number;
   private readonly progressCheckInterval = 250;
   private readonly preloadTimePortion = .9;
+  private playingSongID: number;
 
   private settingsSubscriptions: Subscription[] = [];
   private progressSubscription: Subscription;
@@ -50,19 +51,40 @@ export class PlayerService implements OnDestroy{
   public setPlaylist(playlist: Song[], startIndex: number = 0){
     this.playlist = playlist;
     this.playlistIndex = startIndex;
+    this.play();
+    this.pause();
   }
 
   public play(): void{
     if(this.currentSongNotExistsOrOver){
       this.prepareSong();
     }
-    this.playingSong.play();
+    this.playingSongID = this.playingSong.play();
   }
 
   public pause(): void{
     if(this.playingSong){
       this.playingSong.pause();
     }
+  }
+
+  public seek(newPosition: number){
+    if(!this.playingSongID){
+      console.log('no song ID');
+      return;
+    }
+    if(this.playingSong.duration() <= newPosition){
+      console.log('seek over max', this.playingSong.duration(), newPosition)
+      this.playingSong.seek(this.playingSong.duration() - 100, this.playingSongID);
+      return;
+    }
+    if(newPosition < 0){
+      console.log('seek under zero', newPosition);
+      this.playingSong.seek(0, this.playingSongID);
+      return;
+    }
+    console.log('seek', newPosition);
+    this.playingSong.seek(newPosition, this.playingSongID);
   }
 
   private get currentSongNotExistsOrOver(){

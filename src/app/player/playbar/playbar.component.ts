@@ -24,12 +24,16 @@ export class PlaybarComponent implements OnInit, OnDestroy{
 
   sliderValue = new FormControl(0);
   private subscriptions: Subscription[] = [];
+  private changing: boolean = false;
   @ViewChild('sliderInput') private slider: ElementRef<HTMLInputElement>;
 
   constructor(private progressService: ProgressService) {}
 
   ngOnInit() {
     const progressSubscription = this.progressService.playedLengthMillis$.subscribe(value => {
+      if(this.changing){
+        return;
+      }
       this.sliderValue.setValue(value, { emitEvent: false });
     });
     this.subscriptions.push(progressSubscription);
@@ -50,6 +54,14 @@ export class PlaybarComponent implements OnInit, OnDestroy{
 
   get playedLengthTime(): string{
     return this.convertMillisToTime(Number(this.sliderValue.value));
+  }
+
+  onMouseDown(){
+    this.changing = true;
+  }
+
+  onMouseUp(){
+    this.changing = false;
   }
 
   private convertMillisToTime(milliseconds: number): string{

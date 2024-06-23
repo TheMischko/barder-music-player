@@ -67,6 +67,10 @@ export class PlayerComponent implements OnInit,OnDestroy{
     this.playerService.pause();
   }
 
+  onSeek(newPosition: number){
+    this.playerService.seek(newPosition/1000);
+  }
+
   private onStartPlaying(song: Song){
     this.playingSong = song;
     this.playing = true;
@@ -74,7 +78,6 @@ export class PlayerComponent implements OnInit,OnDestroy{
   }
 
   private onPlaying(progress: SongProgress){
-    console.log(progress.position);
     this.progressService.updatePlayedLengthMillis(progress.position);
   }
 }

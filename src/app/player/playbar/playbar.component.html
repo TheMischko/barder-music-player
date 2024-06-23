@@ -8,6 +8,8 @@
                [max]="trackLengthMillis"
                [stepSize]="1"
                [formControl]="sliderValue"
+               (mousedown)="onMouseDown()"
+               (mouseup)="onMouseUp()"
         />
     </div>
     <span class="time unselectable">
