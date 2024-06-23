@@ -10,9 +10,6 @@ import {Song} from "../models/music";
   styleUrl: './player.component.scss'
 })
 export class PlayerComponent implements OnInit,OnDestroy{
-  songTitle = "Cobblestone village";
-  songPlaylist = "Fantasy live music";
-
   private playing: boolean = false;
   playingSong: Song;
   private subscriptions: Subscription[] = [];
@@ -71,6 +68,5 @@ export class PlayerComponent implements OnInit,OnDestroy{
   private onStartPlaying(song: Song){
     this.playingSong = song;
     this.playing = true;
-    console.log(song);
   }
 }

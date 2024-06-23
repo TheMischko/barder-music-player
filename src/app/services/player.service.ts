@@ -18,7 +18,9 @@ export class PlayerService implements OnDestroy{
 
   private playingSong: Howl;
   private nextSong: Howl;
-  private playlist: Song[];
+  private nextSongIndex: number;
+  private playlist: Howl[];
+  private songlist: Song[];
   private playlistIndex: number;
   private readonly progressCheckInterval = 250;
   private readonly preloadTimePortion = .9;
@@ -50,7 +52,12 @@ export class PlayerService implements OnDestroy{
   }
 
   public setPlaylist(playlist: Song[], startIndex: number = 0){
-    this.playlist = playlist;
+    this.songlist = [];
+    this.playlist = [];
+    playlist.forEach((song: Song) => {
+      this.songlist.push(song);
+      this.playlist.push(this.createHowl(song));
+    });
     this.playlistIndex = startIndex;
     this.play();
     this.pause();
@@ -90,14 +97,10 @@ export class PlayerService implements OnDestroy{
 
   private prepareSong(){
     if(this.nextSong === undefined){
-      const song = this.playlist[this.playlistIndex];
-      this.playingSong = this.createHowl({
-        src: [song.src],
-      });
+      this.playingSong = this.playlist[this.playlistIndex];
     } else {
       this.playingSong = this.nextSong;
       this.nextSong = undefined;
-      this.playlistIndex += 1;
     }
     const loop: boolean = this.playbackSettings.loop$.getValue() === LoopState.Current;
     const volume: number = this.playbackSettings.volume$.getValue();
@@ -110,8 +113,8 @@ export class PlayerService implements OnDestroy{
         this.onLoad.emit();
       });
       this.playingSong.on('play', () => {
-        this.onStartPlaying.emit(this.playlist[this.playlistIndex]);
-        this.progressService.updateCurrentDurationMillis(this.playlist[this.playlistIndex].duration);
+        this.onStartPlaying.emit(this.songlist[this.playlistIndex]);
+        this.progressService.updateCurrentDurationMillis(this.songlist[this.playlistIndex].duration);
         this.startProgressTracking();
       });
       this.playingSong.on('pause', () => {
@@ -151,36 +154,51 @@ export class PlayerService implements OnDestroy{
     }
   }
 
-  private preloadNextSong(){
-    if(this.nextSong !== undefined){
-      return;
-    }
+  private get isCurrentLastSong(): boolean{
+    return this.playlistIndex >= this.playlist.length - 1;
+  }
+
+  /**
+   * Returns true if current song is last in playlist and the playlist is not repeating, or current song should loop
+   * @private
+   */
+  private get shouldNotPlayNextSong(): boolean{
     const loop = this.playbackSettings.loop$.getValue();
-    if(loop === LoopState.Current){
+    return loop === LoopState.Current || (this.isCurrentLastSong && loop != LoopState.Playlist)
+  }
+
+  private get nextSongIsLoading(){
+    const state = this.nextSong.state()
+    return state === "loading" || state === "loaded";
+  }
+
+  private preloadNextSong(){
+    if(this.shouldNotPlayNextSong){
       return;
     }
-    if(this.playlistIndex < this.playlist.length - 1){
-      const nextSongIndex = this.playlistIndex + 1;
-      const nextSong = this.playlist[nextSongIndex];
-      this.nextSong = this.createHowl({
-        src: [nextSong.src]
-      });
-      this.nextSong.load();
-    } else if(loop === LoopState.Playlist && this.playlistIndex === this.playlist.length - 1){
-      const nextSong = this.playlist[0];
-      this.nextSong = this.createHowl({
-        src: [nextSong.src]
-      });
+    if(this.nextSong && this.nextSongIsLoading){
+      return;
     }
+    this.nextSongIndex = this.isCurrentLastSong ? 0 : this.playlistIndex + 1;
+    this.nextSong = this.playlist[this.nextSongIndex].load();
   }
 
   private playNextSong(){
+    if(this.shouldNotPlayNextSong){
+      return;
+    }
+    this.playingSong.unload();
     if(this.nextSong){
-      this.playlistIndex = (this.playlistIndex + 1) % this.playlist.length;
+      this.playlistIndex = this.nextSongIndex;
+      this.songEventsAttached = false;
       this.prepareSong();
       this.play();
-      this.songEventsAttached = false;
+      return;
     }
+    this.playlistIndex = this.isCurrentLastSong ? 0 : this.playlistIndex + 1;
+    this.songEventsAttached = false;
+    this.prepareSong();
+    this.play();
   }
 
   createHowl(options: HowlOptions): Howl{
