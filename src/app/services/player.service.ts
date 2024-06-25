@@ -41,7 +41,6 @@ export class PlayerService implements OnDestroy{
     this.settingsSubscriptions.push(
       this.playbackSettings.loop$.subscribe((loop: LoopState) => {
         if(this.playingSong){
-          console.log(`Setting looping ${loop === LoopState.Current ? 'on' : 'off'}`);
           this.playingSong.loop(loop === LoopState.Current);
         }
       })
