@@ -7,10 +7,12 @@ import { heroArrowDownCircleSolid } from "@ng-icons/heroicons/solid";
 import { SliderComponent } from './controls/slider/slider.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { CardComponent } from './containers/card/card.component';
+import { ModalComponent } from './containers/modal/modal.component';
+import { BaseModalComponent } from './containers/modal/base-modal.component';
 
 @NgModule({
-  declarations: [ButtonComponent, SliderComponent, CardComponent],
-  exports: [ButtonComponent, SliderComponent, CardComponent],
+  declarations: [ButtonComponent, SliderComponent, CardComponent, ModalComponent, BaseModalComponent],
+  exports: [ButtonComponent, SliderComponent, CardComponent, ModalComponent],
   imports: [
     CommonModule,
     BrowserModule,

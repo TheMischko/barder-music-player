@@ -1,6 +1,9 @@
-<app-card class="card-padding">
+<app-card class="card-padding" (click)="openModal()">
     <div class="dashed-container">
         <ng-icon name="ionAddCircleOutline" size="40"></ng-icon>
         Create new playlist
     </div>
 </app-card>
+<app-modal [isVisible]="isModalOpen" (close)="closeModal()">
+
+</app-modal>

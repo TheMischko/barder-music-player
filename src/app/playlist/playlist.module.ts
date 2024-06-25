@@ -6,6 +6,7 @@ import {SharedModule} from "@shared/shared.module";
 import { AddNewCardComponent } from './parts/add-new-card/add-new-card.component';
 import {NgIconsModule} from "@ng-icons/core";
 import {ionAddCircleOutline} from "@ng-icons/ionicons";
+import { CreatePlaylistModalComponent } from './playlist-landing/create-playlist-modal/create-playlist-modal.component';
 
 const routes: Routes = [
   { path: '', component: PlaylistLandingComponent}
@@ -14,7 +15,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     PlaylistLandingComponent,
-    AddNewCardComponent
+    AddNewCardComponent,
+    CreatePlaylistModalComponent
   ],
   imports: [
     CommonModule,
