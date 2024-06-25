@@ -1,7 +1,20 @@
 $color-primary: #4793AF;
 $color-secondary: #FFC470;
-$color-white: #fffcfb;
 $color-danger: #DD5746;
-$color-grey: #c5c5c5;
 
-$color-text-primary: #232323
+$color-grey-100: #f8f9fa;
+$color-grey-200: #e9ecef;
+$color-grey-300: #dee2e6;
+$color-grey-400: #ced4da;
+$color-grey-500: #adb5bd;
+$color-grey-600: #6c757d;
+$color-grey-700: #495057;
+$color-grey-800: #343a40;
+$color-grey-900: #212529;
+$color-grey-light: $color-grey-400;
+$color-grey-dark: $color-grey-700;
+
+$color-white: $color-grey-100;
+
+$color-text-primary: $color-grey-900;
+

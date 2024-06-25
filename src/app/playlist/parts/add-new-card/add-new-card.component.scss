@@ -1,0 +1,24 @@
+@import "../../../../scss/variables.scss";
+@import "../../../../scss/colors.scss";
+:host ::ng-deep .card-padding .card .body{
+  padding: 12px;
+}
+.dashed-container{
+  height: 100%;
+  width: 100%;
+  border: 2px dashed #ccc;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  cursor: pointer;
+  color: #ccc;
+  &:hover{
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
