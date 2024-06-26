@@ -1,0 +1,24 @@
+@import "../../../../scss/typography";
+@import "../../../../scss/colors";
+
+:host{
+  &.ng-disabled input[type="text"]{
+    color: $color-grey-600;
+  }
+  &.ng-valid input[type="text"]{
+    border-bottom: 3px solid $color-brown;
+  }
+  &.ng-invalid.ng-dirty input[type="text"]{
+    border-bottom: 3px solid $color-danger;
+  }
+}
+input[type="text"] {
+  @include typo-input;
+  color: $color-brown;
+  background: none;
+  border-bottom: 3px solid $color-grey-600;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+}

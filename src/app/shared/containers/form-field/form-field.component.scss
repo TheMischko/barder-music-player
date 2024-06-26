@@ -1,0 +1,9 @@
+@import "../../../../scss/typography";
+@import "../../../../scss/colors";
+
+:host ::ng-deep .form-field{
+  label{
+    @include typo-input-label;
+    color: $color-brown;
+  }
+}

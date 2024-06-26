@@ -1,3 +1,14 @@
 <app-modal [isVisible]="isVisible" (closed)="onClose()">
-    <p>create-playlist-modal works!</p>
+    <div class="modal-content">
+        <app-form-field>
+            <app-text-input [formControl]="playlistName" placeholder="Enter a playlist name" label="Playlist name:"></app-text-input>
+        </app-form-field>
+        <app-form-field>
+            <app-image-select-input label="Playlist cover image:" (imageSelected)="onImageSelected($event)" [initialValue]="coverImage"></app-image-select-input>
+        </app-form-field>
+        <div class="controls">
+            <app-button type="fill" color="primary" (click)="createClick()">Create</app-button>
+            <app-button type="fill" color="danger" (cancel)="close()">Cancel</app-button>
+        </div>
+    </div>
 </app-modal>

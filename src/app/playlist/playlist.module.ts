@@ -7,6 +7,7 @@ import { AddNewCardComponent } from './parts/add-new-card/add-new-card.component
 import {NgIconsModule} from "@ng-icons/core";
 import {ionAddCircleOutline} from "@ng-icons/ionicons";
 import { CreatePlaylistModalComponent } from './playlist-landing/create-playlist-modal/create-playlist-modal.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 const routes: Routes = [
   { path: '', component: PlaylistLandingComponent}
@@ -22,7 +23,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
-    NgIconsModule.withIcons({ionAddCircleOutline})
+    NgIconsModule.withIcons({ionAddCircleOutline}),
+    ReactiveFormsModule
   ]
 })
 export class PlaylistModule { }

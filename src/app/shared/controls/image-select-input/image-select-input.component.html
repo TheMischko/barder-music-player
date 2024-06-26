@@ -1,0 +1,15 @@
+<label *ngIf="label">
+    {{ label }}
+</label>
+<div class="images-wrapper">
+    <div *ngFor="let image of images; trackBy: trackByImage"
+         class="selectable-image"
+         [ngClass]="{ 'selected': image === value }"
+         (click)="imageClicked(image)">
+        <img [ngSrc]="image"
+             [alt]="'Image ' + image"
+             [width]="WIDTH"
+             [height]="HEIGHT"
+        >
+    </div>
+</div>
