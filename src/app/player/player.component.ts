@@ -16,25 +16,21 @@ export class PlayerComponent implements OnInit,OnDestroy{
   private playlist: Song[] = [
     {
       title: "Cobblestone Village",
-      playlist: "Test playlist",
       src: "/assets/playlist/Cobblestone_Village.mp3",
       duration: 258000
     },
     {
       title: "Market Town",
-      playlist: "Test playlist",
       src: "/assets/playlist/Market_Town.mp3",
       duration: 217000
     },
     {
       title: "Timber Town",
-      playlist: "Test playlist",
       src: "/assets/playlist/Timber_Town.mp3",
       duration: 214000
     },
     {
       title: "Village Atmo KCD",
-      playlist: "Test playlist",
       src: "/assets/playlist/Village_Atmo_KCD.mp3",
       duration: 78000
     }
