@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoopControlComponent } from './loop-control.component';
+import {SharedModule} from "@shared/shared.module";
+import {heroArrowPathRoundedSquare} from "@ng-icons/heroicons/outline";
+import {NgIconsModule} from "@ng-icons/core";
 
 describe('LoopControlComponent', () => {
   let component: LoopControlComponent;
@@ -8,7 +11,8 @@ describe('LoopControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoopControlComponent]
+      declarations: [LoopControlComponent],
+      imports: [SharedModule, NgIconsModule.withIcons({heroArrowPathRoundedSquare})]
     })
     .compileComponents();
 

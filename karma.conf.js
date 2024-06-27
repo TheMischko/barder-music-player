@@ -23,7 +23,7 @@ module.exports = function (config) {
     },
     files: [
       { pattern: './node_modules/@angular/**/*.js', watched: false, included: false, served: true }, // Include Angular's JavaScript files
-      { pattern: './src/test.ts', watched: true } // Your test.ts file
+      { pattern: './src/test.ts', watched: true, type: 'js' } // Your test.ts file
     ],
     proxies: {
       '/node_modules/': '/base/node_modules/' // Proxy requests from /node_modules/ to /base/node_modules/

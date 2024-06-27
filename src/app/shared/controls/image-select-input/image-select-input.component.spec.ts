@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageSelectInputComponent } from './image-select-input.component';
+import {NgOptimizedImage} from "@angular/common";
 
 describe('ImageSelectInputComponent', () => {
   let component: ImageSelectInputComponent;
@@ -8,7 +9,8 @@ describe('ImageSelectInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImageSelectInputComponent]
+      declarations: [ImageSelectInputComponent],
+      imports: [NgOptimizedImage]
     })
     .compileComponents();
 

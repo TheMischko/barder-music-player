@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {Playlist} from "../models/playlist";
 import {PlaylistMock} from "@services/playlist.mock";
+import {Song} from "../models/music";
+import {map} from "rxjs/internal/operators/map";
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,49 @@ export class PlaylistService {
     return this.playlists.asObservable();
   }
 
+  public getPlaylist$(playlistID: string) {
+    return this.playlists$.pipe(
+      map(playlists => playlists.find(playlist => playlist.id === playlistID)
+    ));
+  }
+
   loadPlaylists(): void {
-    // Load the playlists from the server
+    // Load the playlists from the provider
     this.playlists.next(PlaylistMock);
+  }
+
+  addPlaylist(playlist: Playlist): void {
+    // Push changes to the provider
+    this.playlists.next([...this.playlists.value, playlist]);
+  }
+
+  addSongToPlaylist(playlistID: string, song: Song){
+    const playlistIndex = this.playlists.value.findIndex(
+      (playlist) => playlist.id === playlistID
+    );
+    if(playlistIndex === -1) {
+      throw new Error('Playlist not found');
+    }
+    const playlists = this.playlists.value;
+    playlists[playlistIndex].songs.push(song);
+    this.playlists.next(playlists);
+  }
+
+  updatePlaylist(playlistID: string, updatedPlaylist: Playlist) {
+    const playlistIndex = this.playlists.value.findIndex(playlist => playlist.id === playlistID);
+    if(playlistIndex === -1) {
+      throw new Error('Playlist not found');
+    }
+    const playlists = this.playlists.value;
+    this.playlists.next([...playlists.slice(0, playlistIndex), updatedPlaylist, ...playlists.slice(playlistIndex + 1)]);
+  }
+
+  removePlaylist(playlistID: string) {
+    const playlistIndex = this.playlists.value.findIndex(playlist => playlist.id === playlistID);
+    if(playlistIndex === -1) {
+      throw new Error('Playlist not found');
+    }
+    const playlists = this.playlists.value;
+    this.playlists.next([...playlists.slice(0, playlistIndex), ...playlists.slice(playlistIndex + 1)]);
   }
 }
