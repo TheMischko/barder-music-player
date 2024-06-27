@@ -1,0 +1,21 @@
+use diesel::prelude::*;
+use crate::models::Playlist;
+use crate::schema::playlists::dsl::playlists;
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::schema::playlists)]
+pub struct NewPlaylist {
+    pub name: String,
+    pub coverImage: String,
+    pub parentID: Option<i32>,
+}
+
+pub fn create_playlist(connection: &mut SqliteConnection, new_playlist: NewPlaylist) -> QueryResult<usize> {
+    diesel::insert_into(playlists)
+        .values(new_playlist)
+        .execute(connection)
+}
+
+pub fn load_all_playlists(connection: &mut SqliteConnection) -> QueryResult<Vec<Playlist>> {
+    playlists.select(playlists::all_columns()).load(connection)
+}

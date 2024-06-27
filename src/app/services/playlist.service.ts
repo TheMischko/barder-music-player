@@ -4,13 +4,14 @@ import {Playlist} from "../models/playlist";
 import {PlaylistMock} from "@services/playlist.mock";
 import {Song} from "../models/music";
 import {map} from "rxjs/internal/operators/map";
+import {TauriService} from "@services/tauri.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlaylistService {
   private playlists: BehaviorSubject<Playlist[]> | null = null;
-  constructor() { }
+  constructor(private tauriService: TauriService) { }
 
   public get playlists$() {
     if(this.playlists === null) {
@@ -28,12 +29,18 @@ export class PlaylistService {
 
   loadPlaylists(): void {
     // Load the playlists from the provider
-    this.playlists.next(PlaylistMock);
+    this.tauriService.invokeCommand<Playlist[]>('get_all_playlists')
+      .subscribe(playlists => {
+        this.playlists.next(playlists);
+    });
   }
 
   addPlaylist(playlist: Playlist): void {
     // Push changes to the provider
-    this.playlists.next([...this.playlists.value, playlist]);
+    this.tauriService.invokeCommand('create_playlist', playlist)
+      .subscribe(playlist => {
+      this.playlists.next([...this.playlists.value, playlist as Playlist]);
+    });
   }
 
   addSongToPlaylist(playlistID: string, song: Song){

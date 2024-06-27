@@ -12,4 +12,5 @@ export interface Playlist {
   name: string;
   parentID: string | null;
   songs: Song[];
+  created_at?: Date;
 }

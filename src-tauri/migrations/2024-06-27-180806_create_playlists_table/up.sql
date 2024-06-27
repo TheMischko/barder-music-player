@@ -1,0 +1,8 @@
+-- Your SQL goes here
+CREATE TABLE playlists (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  coverImage TEXT NOT NULL,
+  parentID INTEGER,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
