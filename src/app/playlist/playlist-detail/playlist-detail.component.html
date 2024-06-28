@@ -1,0 +1,29 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <img [src]="playlist?.coverImage" alt="Cover Image" class="cover-image" />
+    <div class="breadcrumb">
+      <a routerLink="/">Playlists</a>
+      <span>></span>
+      <span>{{ playlist?.name ?? "Playlist" }}</span>
+    </div>
+    <h1>{{ playlist?.name ?? "Playlist" }}</h1>
+  </div>
+  <div class="page-content">
+    <div class="playlist-wrapper">
+      <h2>Playlists</h2>
+      <div class="playlist-list card-wrapper">
+        <app-add-new-card (click)="openNewPlaylistModal()"> </app-add-new-card>
+        <app-playlist-card
+          *ngFor="let childPlaylist of childPlaylists"
+          [playlist]="childPlaylist"
+        ></app-playlist-card>
+      </div>
+    </div>
+    <div class="song-wrapper">
+      <h2>Songs</h2>
+      <div class="song-list">
+        <div class="song">Song 1</div>
+      </div>
+    </div>
+  </div>
+</div>

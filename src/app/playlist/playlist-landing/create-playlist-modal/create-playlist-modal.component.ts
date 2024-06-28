@@ -9,7 +9,7 @@ import { CreatePlaylistData } from "../../../models/playlist";
   styleUrl: "./create-playlist-modal.component.scss",
 })
 export class CreatePlaylistModalComponent extends ModalComponent<CreatePlaylistData | null> {
-  @Input() playlistParentId: string | null = null;
+  @Input() playlistParentId: number | null = null;
   playlistName = new FormControl("", [
     Validators.required,
     Validators.minLength(3),

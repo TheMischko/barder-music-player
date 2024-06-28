@@ -1,4 +1,4 @@
-<app-card>
+<app-card (click)="displayDetail()">
   <div class="content-wrapper">
     <img [src]="playlist.coverImage" [alt]="playlist.name + 'image'" />
     <h3>{{ playlist.name }}</h3>

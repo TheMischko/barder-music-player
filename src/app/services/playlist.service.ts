@@ -28,10 +28,20 @@ export class PlaylistService implements OnDestroy {
     return this.playlists.asObservable();
   }
 
-  public getPlaylist$(playlistID: string) {
+  public getPlaylist$(playlistID: number) {
     return this.playlists$.pipe(
       map((playlists) =>
-        playlists.find((playlist) => playlist.id === playlistID),
+        playlists.find((playlist) => {
+          return playlist.id === playlistID;
+        }),
+      ),
+    );
+  }
+
+  public getChildrenPlaylists$(playlistID: number) {
+    return this.playlists$.pipe(
+      map((playlists) =>
+        playlists.filter((playlist) => playlist.parentID === playlistID),
       ),
     );
   }
@@ -65,7 +75,7 @@ export class PlaylistService implements OnDestroy {
     );
   }
 
-  addSongToPlaylist(playlistID: string, song: Song) {
+  addSongToPlaylist(playlistID: number, song: Song) {
     const playlistIndex = this.playlists.value.findIndex(
       (playlist) => playlist.id === playlistID,
     );
@@ -77,7 +87,7 @@ export class PlaylistService implements OnDestroy {
     this.playlists.next(playlists);
   }
 
-  updatePlaylist(playlistID: string, updatedPlaylist: Playlist) {
+  updatePlaylist(playlistID: number, updatedPlaylist: Playlist) {
     const playlistIndex = this.playlists.value.findIndex(
       (playlist) => playlist.id === playlistID,
     );
@@ -92,7 +102,7 @@ export class PlaylistService implements OnDestroy {
     ]);
   }
 
-  removePlaylist(playlistID: string) {
+  removePlaylist(playlistID: number) {
     const playlistIndex = this.playlists.value.findIndex(
       (playlist) => playlist.id === playlistID,
     );

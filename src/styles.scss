@@ -21,6 +21,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 .container {
   margin: 0;
   padding-top: 10vh;
@@ -68,6 +74,27 @@ button {
 input,
 button {
   outline: none;
+}
+
+/* This will change the scrollbar for the whole page */
+::-webkit-scrollbar {
+  width: 6px; /* width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* color of the tracking area */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* color of the scroll thumb */
+  border-radius: 10px;
+  transition: background 0.5s;
+}
+
+@keyframes fade {
+  to {
+    background: transparent;
+  }
 }
 
 .unselectable {

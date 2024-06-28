@@ -1,16 +1,16 @@
-import {Song} from "./music";
+import { Song } from "./music";
 
 export interface CreatePlaylistData {
   coverImage: string;
   name: string;
-  parentID: string | null;
+  parentID: number | null;
 }
 
 export interface Playlist {
   coverImage: string;
-  id: string;
+  id: number;
   name: string;
-  parentID: string | null;
+  parentID: number | null;
   songs: Song[];
   created_at?: Date;
 }
