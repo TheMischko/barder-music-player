@@ -1,28 +1,28 @@
 @import "../../../../scss/variables.scss";
 @import "../../../../scss/colors.scss";
 
-.card{
+.card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 10rem;
-  height: 12rem;
+  width: 15rem;
+  height: 18rem;
   border-radius: 12px;
   box-shadow: 1px 1px 5px $color-grey-800;
   background-color: $color-grey-dark;
   color: $color-grey-light;
   margin: 1rem;
-  &:hover{
+  &:hover {
     box-shadow: 1px 1px 5px $color-grey-900;
   }
-  .body{
+  .body {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     flex-grow: 1;
   }
-  .footer{
+  .footer {
     width: 100%;
   }
 }

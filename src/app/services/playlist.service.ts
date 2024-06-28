@@ -15,7 +15,6 @@ export class PlaylistService implements OnDestroy {
   constructor(private tauriService: TauriService) {}
 
   ngOnDestroy() {
-    console.log("PlaylistService destroyed");
     this.destroy$.next();
     this.destroy$.complete();
     this.subscriptions.forEach((sub) => sub.unsubscribe());

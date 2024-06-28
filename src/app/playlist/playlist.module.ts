@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { PlaylistLandingComponent } from './playlist-landing/playlist-landing.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "@shared/shared.module";
@@ -8,6 +8,7 @@ import {NgIconsModule} from "@ng-icons/core";
 import {ionAddCircleOutline} from "@ng-icons/ionicons";
 import { CreatePlaylistModalComponent } from './playlist-landing/create-playlist-modal/create-playlist-modal.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { PlaylistCardComponent } from './parts/playlist-card/playlist-card.component';
 
 const routes: Routes = [
   { path: '', component: PlaylistLandingComponent}
@@ -17,14 +18,16 @@ const routes: Routes = [
   declarations: [
     PlaylistLandingComponent,
     AddNewCardComponent,
-    CreatePlaylistModalComponent
+    CreatePlaylistModalComponent,
+    PlaylistCardComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
-    NgIconsModule.withIcons({ionAddCircleOutline}),
-    ReactiveFormsModule
-  ]
+    NgIconsModule.withIcons({ ionAddCircleOutline }),
+    ReactiveFormsModule,
+    NgOptimizedImage,
+  ],
 })
-export class PlaylistModule { }
+export class PlaylistModule {}

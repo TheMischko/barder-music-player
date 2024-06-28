@@ -1,4 +1,6 @@
-<app-add-new-card (click)="openNewPlaylistModal()"> </app-add-new-card>
-<div *ngFor="let playlist of playlists">
-  {{ playlist.name }}
+<div class="card-wrapper">
+  <app-playlist-card *ngFor="let playlist of playlists" [playlist]="playlist">
+    {{ playlist.name }}
+  </app-playlist-card>
+  <app-add-new-card (click)="openNewPlaylistModal()"> </app-add-new-card>
 </div>
