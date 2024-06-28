@@ -8,6 +8,7 @@ mod schema;
 
 use crate::playlist::{load_all_playlists, NewPlaylist};
 use crate::db::establish_db_connection;
+use crate::models::Playlist;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -16,23 +17,22 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn get_all_playlists(window: tauri::Window) {
+fn get_all_playlists() -> Result<Vec<Playlist>, String> {
     let mut connection = establish_db_connection();
-    let playlists = load_all_playlists(&mut connection).unwrap();
-    window.emit("playlists", playlists).unwrap();
+    load_all_playlists(&mut connection).map_err(|err| err.to_string())
 }
 
 #[tauri::command]
-fn create_playlist(new_playlist: NewPlaylist) -> Result<usize, String> {
+fn create_playlist(new_playlist: NewPlaylist) -> Result<Playlist, String> {
     let mut connection = establish_db_connection();
-  playlist::create_playlist(&mut connection, new_playlist)
-      .map_err(|err| err.to_string()) // Convert the diesel::result::Error to a String
+    playlist::create_playlist(&mut connection, new_playlist)
+      .map_err(|err| err.to_string())
 }
 
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![get_all_playlists, create_playlist])
         .setup(|_app| {
           db::init();
           Ok(())

@@ -1,3 +1,4 @@
-<app-add-new-card (click)="openNewPlaylistModal()">
-
-</app-add-new-card>
+<app-add-new-card (click)="openNewPlaylistModal()"> </app-add-new-card>
+<div *ngFor="let playlist of playlists">
+  {{ playlist.name }}
+</div>

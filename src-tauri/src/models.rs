@@ -1,8 +1,9 @@
 use diesel::prelude::*;
 use serde::Serialize;
 use chrono::NaiveDateTime;
+use diesel::Identifiable;
 
-#[derive(Queryable, Selectable, Clone, Serialize)]
+#[derive(Identifiable, Queryable, Selectable, Clone, Serialize)]
 #[diesel(table_name = crate::schema::playlists)]
 pub struct Playlist {
     pub id: i32,

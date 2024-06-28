@@ -1,24 +1,49 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ModalService } from "@services/modal.service";
 import { CreatePlaylistModalComponent } from "./create-playlist-modal/create-playlist-modal.component";
 import { ModalComponent } from "@shared/containers/modal/modal.component";
-import { CreatePlaylistData } from "../../models/playlist";
+import { CreatePlaylistData, Playlist } from "../../models/playlist";
+import { PlaylistService } from "@services/playlist.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-playlist-landing",
   templateUrl: "./playlist-landing.component.html",
   styleUrl: "./playlist-landing.component.scss",
 })
-export class PlaylistLandingComponent {
-  constructor(private modalService: ModalService) {}
+export class PlaylistLandingComponent implements OnInit, OnDestroy {
+  playlists: Playlist[] = [];
+  private subscriptions: Subscription[] = [];
+  constructor(
+    private modalService: ModalService,
+    private playlistService: PlaylistService,
+  ) {}
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.playlistService.playlists$.subscribe((playlists) => {
+        this.playlists = playlists;
+      }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
 
   openNewPlaylistModal() {
-    console.log("openNewPlaylistModal method called");
     const modal: ModalComponent<CreatePlaylistData> = this.modalService.open(
       CreatePlaylistModalComponent,
     );
     modal.closed.subscribe((data) => {
-      console.log(data);
+      this.createNewPlaylist(data);
     });
+  }
+
+  private createNewPlaylist(data: CreatePlaylistData | null) {
+    if (data === null) {
+      return;
+    }
+    this.playlistService.addPlaylist(data);
   }
 }
