@@ -1,21 +1,15 @@
 // modal.component.ts
-import { Component } from '@angular/core';
-import { BaseModalComponent } from './base-modal.component';
+
+import { Component, EventEmitter } from "@angular/core";
 
 @Component({
-  selector: 'app-modal',
-  template: `
-    <app-base-modal [isVisible]="isVisible" (closed)="onClose()">
-      <ng-content></ng-content>
-    </app-base-modal>
-  `
+  selector: "app-modal",
+  template: "",
 })
-export class ModalComponent extends BaseModalComponent {
-  open(){
-    this.isVisible = true;
-  }
-
-  close(){
-    this.isVisible = false;
+export class ModalComponent<T> {
+  closed = new EventEmitter<T>();
+  open() {}
+  close(data: T) {
+    this.closed.emit(data);
   }
 }

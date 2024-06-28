@@ -1,28 +1,37 @@
-import {Component, Input} from '@angular/core';
-import {ModalComponent} from "@shared/containers/modal/modal.component";
-import {FormControl, Validators} from "@angular/forms";
-import {CreatePlaylistData} from "../../../models/playlist";
+import { Component, Input } from "@angular/core";
+import { ModalComponent } from "@shared/containers/modal/modal.component";
+import { FormControl, Validators } from "@angular/forms";
+import { CreatePlaylistData } from "../../../models/playlist";
 
 @Component({
-  selector: 'app-create-playlist-modal',
-  templateUrl: './create-playlist-modal.component.html',
-  styleUrl: './create-playlist-modal.component.scss'
+  selector: "app-create-playlist-modal",
+  templateUrl: "./create-playlist-modal.component.html",
+  styleUrl: "./create-playlist-modal.component.scss",
 })
-export class CreatePlaylistModalComponent extends ModalComponent {
+export class CreatePlaylistModalComponent extends ModalComponent<CreatePlaylistData | null> {
   @Input() playlistParentId: string | null = null;
-  playlistName = new FormControl('', [
+  playlistName = new FormControl("", [
     Validators.required,
     Validators.minLength(3),
-    Validators.maxLength(32)
+    Validators.maxLength(32),
   ]);
-  coverImage = '';
+  coverImage: string = "";
+  isVisible: boolean = true;
 
-  createClick(){
-    const data: CreatePlaylistData = {
+  closeData: CreatePlaylistData | null = null;
+
+  createClick() {
+    this.closeData = {
       parentID: this.playlistParentId,
       name: this.playlistName.value,
-      coverImage: this.coverImage
+      coverImage: this.coverImage,
     };
+    this.isVisible = false;
+    this.close(this.closeData);
+  }
+
+  canceled() {
+    this.close(null);
   }
 
   onImageSelected(image: string): void {
