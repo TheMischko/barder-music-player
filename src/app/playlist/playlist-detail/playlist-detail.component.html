@@ -1,10 +1,14 @@
 <div class="page-wrapper">
   <div class="page-header">
     <img [src]="playlist?.coverImage" alt="Cover Image" class="cover-image" />
-    <div class="breadcrumb">
-      <a routerLink="/">Playlists</a>
-      <span>></span>
-      <span>{{ playlist?.name ?? "Playlist" }}</span>
+    <div class="breadcrumbs">
+        <div class="breadcrumb">
+            <a routerLink="/">Playlists</a>
+        </div>
+        <div *ngFor="let parent of parentPlaylists.toReversed(); trackBy:trackByPlaylistId" class="breadcrumb">
+            <span>></span>
+            <a [routerLink]="['/playlist',parent.id]">{{ parent.name }}</a>
+        </div>
     </div>
     <h1>{{ playlist?.name ?? "Playlist" }}</h1>
   </div>
@@ -14,7 +18,7 @@
       <div class="playlist-list card-wrapper">
         <app-add-new-card (click)="openNewPlaylistModal()"> </app-add-new-card>
         <app-playlist-card
-          *ngFor="let childPlaylist of childPlaylists"
+          *ngFor="let childPlaylist of childPlaylists; trackBy:trackByPlaylistId"
           [playlist]="childPlaylist"
         ></app-playlist-card>
       </div>

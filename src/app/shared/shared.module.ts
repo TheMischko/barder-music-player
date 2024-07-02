@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { ButtonComponent } from "./controls/button/button.component";
-import { BrowserModule } from "@angular/platform-browser";
 import { NgIconsModule } from "@ng-icons/core";
 import { heroArrowDownCircleSolid } from "@ng-icons/heroicons/solid";
 import { SliderComponent } from "./controls/slider/slider.component";
@@ -36,7 +35,6 @@ import { FormFieldComponent } from "./containers/form-field/form-field.component
   ],
   imports: [
     CommonModule,
-    BrowserModule,
     NgIconsModule.withIcons({ heroArrowDownCircleSolid }),
     FormsModule,
     ReactiveFormsModule,

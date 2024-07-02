@@ -16,6 +16,7 @@ export class PlaylistDetailComponent implements OnInit, OnDestroy {
   id: number;
   playlist: Playlist;
   childPlaylists: Playlist[] = [];
+  parentPlaylists: Playlist[] = [];
 
   subscriptions: Subscription[] = [];
 
@@ -31,7 +32,9 @@ export class PlaylistDetailComponent implements OnInit, OnDestroy {
       this.linkToParamMapIdSubscription<Playlist>(
         this.playlistService.getPlaylist$.bind(this.playlistService),
       ).subscribe((playlist) => {
+        this.id = playlist.id;
         this.playlist = playlist;
+        this.parentPlaylists = this.playlistService.getParentPlaylists(this.playlist.id);
       }),
     );
 
@@ -60,6 +63,10 @@ export class PlaylistDetailComponent implements OnInit, OnDestroy {
         this.playlistService.addPlaylist(playlist);
       }),
     );
+  }
+
+  trackByPlaylistId(index: number, playlist: Playlist) {
+    return playlist.id;
   }
 
   private linkToParamMapIdSubscription<T>(

@@ -43,12 +43,16 @@
   min-height: 50vh;
 }
 
-.breadcrumb {
+.breadcrumbs {
   position: absolute;
   top: 0.5rem;
   left: 0.5rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   padding: 1rem;
   color: whitesmoke;
   user-select: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 33%;
 }

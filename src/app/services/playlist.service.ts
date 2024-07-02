@@ -87,6 +87,23 @@ export class PlaylistService implements OnDestroy {
     this.playlists.next(playlists);
   }
 
+  getParentPlaylists(childID: number): Playlist[] {
+    const parentList: Playlist[] = [];
+    const playlists = this.playlists.value;
+    let currentID = childID;
+    let current: Playlist;
+
+    do {
+      current = playlists.find((playlist) => playlist.id === currentID);
+      if (current) {
+        parentList.push(current);
+        currentID = current.parentID;
+      }
+    } while (current);
+
+    return parentList;
+  }
+
   updatePlaylist(playlistID: number, updatedPlaylist: Playlist) {
     const playlistIndex = this.playlists.value.findIndex(
       (playlist) => playlist.id === playlistID,
