@@ -11,6 +11,7 @@ pub fn init(){
   if !db_file_exists(){
     create_db_file();
   }
+  run_migrations();
 }
 
 pub fn establish_db_connection() -> SqliteConnection {
