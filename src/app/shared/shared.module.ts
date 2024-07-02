@@ -11,6 +11,8 @@ import { BaseModalComponent } from "./containers/modal/base-modal.component";
 import { TextInputComponent } from "./controls/text-input/text-input.component";
 import { ImageSelectInputComponent } from "./controls/image-select-input/image-select-input.component";
 import { FormFieldComponent } from "./containers/form-field/form-field.component";
+import { CollapsibleContainerComponent } from './collapsible-container/collapsible-container.component';
+import {ionChevronDownSharp} from "@ng-icons/ionicons";
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { FormFieldComponent } from "./containers/form-field/form-field.component
     TextInputComponent,
     ImageSelectInputComponent,
     FormFieldComponent,
+    CollapsibleContainerComponent,
   ],
   exports: [
     ButtonComponent,
@@ -32,10 +35,11 @@ import { FormFieldComponent } from "./containers/form-field/form-field.component
     TextInputComponent,
     ImageSelectInputComponent,
     BaseModalComponent,
+    CollapsibleContainerComponent,
   ],
   imports: [
     CommonModule,
-    NgIconsModule.withIcons({ heroArrowDownCircleSolid }),
+    NgIconsModule.withIcons({ heroArrowDownCircleSolid, ionChevronDownSharp }),
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,

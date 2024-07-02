@@ -1,0 +1,17 @@
+<div class="collapsible-container">
+    <div class="collapsible-header" (click)="toggle()">
+        <h2>
+            {{ title }}
+        </h2>
+        <ng-icon name="ionChevronDownSharp"
+                 class="arrow-icon"
+                 [ngClass]="{'collapsed': isCollapsed}"
+        ></ng-icon>
+    </div>
+    <div *ngIf="!isCollapsed"
+         class="collapsible-body"
+         [ngClass]="{'opened': !isCollapsed, 'collapsed': isCollapsed}"
+    >
+        <ng-content></ng-content>
+    </div>
+</div>

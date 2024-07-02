@@ -33,12 +33,14 @@
     user-select: none;
   }
 }
+
 .page-content,
 .playlist-wrapper,
 .song-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
   min-width: 10rem;
   min-height: 50vh;
 }

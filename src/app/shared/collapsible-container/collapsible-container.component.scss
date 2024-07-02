@@ -1,0 +1,29 @@
+@import '../../../scss/typography.scss';
+
+.collapsible-container{
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.collapsible-header{
+  @include typo-input-label();
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0 1rem;
+  width: 100%;
+
+  .arrow-icon{
+    transition: 0.25s ease-out;
+    transform: rotateX(0deg);
+    &.collapsed{
+      transform: rotateX(180deg);
+    }
+  }
+}
+
+.collapsible-body{
+  display: block;
+}
