@@ -1,21 +1,18 @@
 <div class="player">
-    <div class="player-col title-col">
-        <a class="song-title player-text unselectable">
-            {{ playingSong?.title }}
-        </a>
-        <a class="song-playlist player-text unselectable">
-            Playlist
-        </a>
-    </div>
-    <div class="player-col central-col">
-        <app-controls (play)="onPlayClick()"
-                      (pause)="onPauseClick()"
-        ></app-controls>
-        <app-playbar (seek)="onSeek($event)"></app-playbar>
-    </div>
-    <div class="player-col">
-        <app-volume-slider
-            [initialValue]="100"
-        ></app-volume-slider>
-    </div>
+  <div class="player-col title-col">
+    <a class="song-title player-text unselectable">
+      {{ playingSong?.name }}
+    </a>
+    <a class="song-playlist player-text unselectable"> Playlist </a>
+  </div>
+  <div class="player-col central-col">
+    <app-controls
+      (play)="onPlayClick()"
+      (pause)="onPauseClick()"
+    ></app-controls>
+    <app-playbar (seek)="onSeek($event)"></app-playbar>
+  </div>
+  <div class="player-col">
+    <app-volume-slider [initialValue]="100"></app-volume-slider>
+  </div>
 </div>

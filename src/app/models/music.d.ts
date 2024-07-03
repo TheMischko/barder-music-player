@@ -1,8 +1,18 @@
 export interface Song {
-  id?: string;
-  title: string;
+  id?: number;
+  name: string;
   duration: number;
-  src: string;
+  filePath: string;
+  playlistID?: number;
+  orderInPlaylist?: number;
+}
+
+export interface NewSongData {
+  name: string;
+  duration: number;
+  filePath: string;
+  playlistID?: number;
+  orderInPlaylist?: number;
 }
 
 export interface SongProgress {
