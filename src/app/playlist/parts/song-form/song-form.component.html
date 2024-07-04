@@ -1,17 +1,21 @@
-<form formGroupName="songForm">
+<form [formGroup]="songForm" class="song-form">
+  <app-form-field>
+    <label>Song file:</label>
+    <app-file-select formControlName="filePath">
+      <div no-file-template>
+        <span>Click here to select a file of the song.</span>
+      </div>
+      <div file-selected-template>
+        <span>{{ songForm.get("filePath").value }}</span>
+      </div>
+    </app-file-select>
+  </app-form-field>
+
   <app-form-field>
     <app-text-input
       formControlName="name"
       placeholder="Enter a song name"
       label="Song name:"
-    ></app-text-input>
-  </app-form-field>
-
-  <app-form-field>
-    <app-text-input
-      formControlName="filePath"
-      placeholder="Enter a path to the song file"
-      label="Song filepath:"
     ></app-text-input>
   </app-form-field>
 

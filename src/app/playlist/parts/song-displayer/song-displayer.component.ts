@@ -51,6 +51,9 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private fetchSongs() {
+    if (!this.playlist?.id) {
+      return;
+    }
     this.songsSubscription = this.songService
       .getSongsForPlaylist(this.playlist.id)
       .subscribe((songs) => {

@@ -11,8 +11,9 @@ import { BaseModalComponent } from "./containers/modal/base-modal.component";
 import { TextInputComponent } from "./controls/text-input/text-input.component";
 import { ImageSelectInputComponent } from "./controls/image-select-input/image-select-input.component";
 import { FormFieldComponent } from "./containers/form-field/form-field.component";
-import { CollapsibleContainerComponent } from './collapsible-container/collapsible-container.component';
-import {ionChevronDownSharp} from "@ng-icons/ionicons";
+import { CollapsibleContainerComponent } from "./collapsible-container/collapsible-container.component";
+import { ionChevronDownSharp } from "@ng-icons/ionicons";
+import { FileSelectComponent } from "./controls/file-select/file-select.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {ionChevronDownSharp} from "@ng-icons/ionicons";
     ImageSelectInputComponent,
     FormFieldComponent,
     CollapsibleContainerComponent,
+    FileSelectComponent,
   ],
   exports: [
     ButtonComponent,
@@ -36,6 +38,7 @@ import {ionChevronDownSharp} from "@ng-icons/ionicons";
     ImageSelectInputComponent,
     BaseModalComponent,
     CollapsibleContainerComponent,
+    FileSelectComponent,
   ],
   imports: [
     CommonModule,

@@ -1,21 +1,38 @@
-import {Component, Input, forwardRef, Injector, OnInit} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
+import { Component, Input, forwardRef, Injector, OnInit } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from "@angular/forms";
+
+export type TextInputType =
+  | "text"
+  | "password"
+  | "email"
+  | "number"
+  | "color"
+  | "date"
+  | "datetime-local"
+  | "month"
+  | "search"
+  | "tel"
+  | "time"
+  | "url"
+  | "week"
+  | "file";
 
 @Component({
-  selector: 'app-text-input',
-  templateUrl: './text-input.component.html',
-  styleUrls: ['./text-input.component.scss'],
+  selector: "app-text-input",
+  templateUrl: "./text-input.component.html",
+  styleUrls: ["./text-input.component.scss"],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TextInputComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class TextInputComponent implements ControlValueAccessor, OnInit {
   @Input() label: string;
   @Input() placeholder: string;
+  @Input() type: TextInputType = "text";
 
   value: string = "";
   isDisabled: boolean = false;
@@ -24,8 +41,7 @@ export class TextInputComponent implements ControlValueAccessor, OnInit {
 
   control: NgControl;
 
-  constructor(private injector: Injector) {
-  }
+  constructor(private injector: Injector) {}
 
   ngOnInit() {
     this.control = this.injector.get(NgControl);
@@ -36,10 +52,10 @@ export class TextInputComponent implements ControlValueAccessor, OnInit {
 
   get classes(): { [key: string]: boolean } {
     return {
-      'input-disabled': this.isDisabled,
-      'input-filled': this.value.length > 0,
-      'input-valid': this.control.valid && this.control.touched,
-      'input-invalid': !this.control.valid && this.control.touched
+      "input-disabled": this.isDisabled,
+      "input-filled": this.value.length > 0,
+      "input-valid": this.control.valid && this.control.touched,
+      "input-invalid": !this.control.valid && this.control.touched,
     };
   }
 
@@ -48,7 +64,6 @@ export class TextInputComponent implements ControlValueAccessor, OnInit {
     this.value = target.value;
     this.onChange(this.value);
   }
-
 
   registerOnChange(fn: any): void {
     this.onChange = fn;

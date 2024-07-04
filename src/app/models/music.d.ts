@@ -7,6 +7,12 @@ export interface Song {
   orderInPlaylist?: number;
 }
 
+export interface MP3Data {
+  title: string;
+  duration: number;
+  artist: string;
+}
+
 export interface NewSongData {
   name: string;
   duration: number;

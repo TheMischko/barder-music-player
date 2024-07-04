@@ -12,6 +12,7 @@ import { PlaylistCardComponent } from "./parts/playlist-card/playlist-card.compo
 import { PlaylistDetailComponent } from "./playlist-detail/playlist-detail.component";
 import { SongDisplayerComponent } from './parts/song-displayer/song-displayer.component';
 import { SongFormComponent } from './parts/song-form/song-form.component';
+import { NewSongModalComponent } from './playlist-detail/new-song-modal/new-song-modal.component';
 
 const routes: Routes = [
   { path: "", component: PlaylistLandingComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
     PlaylistDetailComponent,
     SongDisplayerComponent,
     SongFormComponent,
+    NewSongModalComponent,
   ],
   imports: [
     CommonModule,

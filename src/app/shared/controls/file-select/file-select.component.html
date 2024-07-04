@@ -1,0 +1,8 @@
+<div class="file-select" (click)="onInputClicked()">
+  <ng-container *ngIf="value; else noFileTemplate">
+    <ng-content select="[file-selected-template]"></ng-content>
+  </ng-container>
+  <ng-template #noFileTemplate>
+    <ng-content select="[no-file-template]"></ng-content>
+  </ng-template>
+</div>
