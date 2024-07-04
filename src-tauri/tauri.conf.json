@@ -17,12 +17,21 @@
         "open": true
       },
       "fs": {
-        "all": true
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "exists": true
       }
     },
     "windows": [
       {
-        "title": "barder",
+        "title": "Barder",
         "width": 1600,
         "height": 900
       }
