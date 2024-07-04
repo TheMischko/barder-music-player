@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-collapsible-container',
-  templateUrl: './collapsible-container.component.html',
-  styleUrl: './collapsible-container.component.scss'
+  selector: "app-collapsible-container",
+  templateUrl: "./collapsible-container.component.html",
+  styleUrl: "./collapsible-container.component.scss",
 })
-export class CollapsibleContainerComponent implements OnInit{
+export class CollapsibleContainerComponent implements OnInit {
   @Input() initialValue: boolean = false;
-  @Input() title: string = '';
+  @Input() title: string = "";
 
   isCollapsed = false;
 

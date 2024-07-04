@@ -6,3 +6,7 @@
 # Goal
 - Friendly to use app to stream music on Discord.
 - Playlist and song management upon locally stored music.
+
+# Dependencies
+- [Node.js@>20](https://nodejs.org/en)
+- [Rust@>1.79](https://www.rust-lang.org/)

@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/husky.sh"
+
+# Running lint-staged
+npx lint-staged
+
+# Check for console.log in staged TypeScript files
+FILES=$(git diff --cached --name-only | grep '\.ts$')
+FOUND=0
+
+for FILE in $FILES
+do
+  if git grep -q 'console.log' "$FILE"; then
+    echo "console.log found in $FILE"
+    FOUND=1
+  fi
+done
+
+if [ "$FOUND" -eq "1" ]; then
+  echo 'Error: console.log found in files. Please remove them before committing.'
+  exit 1
+fi
