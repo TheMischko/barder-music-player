@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { PlaylistCardComponent } from "./parts/playlist-card/playlist-card.component";
 import { PlaylistDetailComponent } from "./playlist-detail/playlist-detail.component";
 import { SongDisplayerComponent } from './parts/song-displayer/song-displayer.component';
+import { SongFormComponent } from './parts/song-form/song-form.component';
 
 const routes: Routes = [
   { path: "", component: PlaylistLandingComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
     PlaylistCardComponent,
     PlaylistDetailComponent,
     SongDisplayerComponent,
+    SongFormComponent,
   ],
   imports: [
     CommonModule,

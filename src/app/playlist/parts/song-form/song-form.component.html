@@ -1,0 +1,20 @@
+<form formGroupName="songForm">
+  <app-form-field>
+    <app-text-input
+      formControlName="name"
+      placeholder="Enter a song name"
+      label="Song name:"
+    ></app-text-input>
+  </app-form-field>
+
+  <app-form-field>
+    <app-text-input
+      formControlName="filePath"
+      placeholder="Enter a path to the song file"
+      label="Song filepath:"
+    ></app-text-input>
+  </app-form-field>
+
+  <input type="hidden" formControlName="songId" />
+  <input type="hidden" formControlName="playlistId" />
+</form>

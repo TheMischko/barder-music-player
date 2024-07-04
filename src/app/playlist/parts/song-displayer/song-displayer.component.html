@@ -1,5 +1,5 @@
 <div class="song-display-header">
-  <app-button>Add new</app-button>
+  <app-button (click)="openNewSongModal()">Add new</app-button>
 </div>
 <div class="songs-container">
   <div *ngFor="let song of songs; trackBy: trackBySongId" class="song-wrapper">

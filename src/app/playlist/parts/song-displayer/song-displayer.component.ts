@@ -10,6 +10,7 @@ import { Playlist } from "../../../models/playlist";
 import { Subscription } from "rxjs";
 import { SongService } from "@services/song.service";
 import { Song } from "../../../models/music";
+import { ModalService } from "@services/modal.service";
 
 @Component({
   selector: "app-song-displayer",
@@ -22,7 +23,10 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
 
   private songsSubscription: Subscription;
 
-  constructor(private songService: SongService) {}
+  constructor(
+    private songService: SongService,
+    private modalService: ModalService,
+  ) {}
 
   ngOnInit(): void {
     this.fetchSongs();
@@ -39,6 +43,9 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
       this.songsSubscription.unsubscribe();
     }
   }
+
+  openNewSongModal() {}
+
   trackBySongId(_: number, song: Song): number {
     return song.id;
   }
