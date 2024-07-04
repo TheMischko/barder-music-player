@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core";
 import { Playlist } from "../../../models/playlist";
 import { Subscription } from "rxjs";
 import { SongService } from "@services/song.service";
@@ -9,27 +16,48 @@ import { Song } from "../../../models/music";
   templateUrl: "./song-displayer.component.html",
   styleUrl: "./song-displayer.component.scss",
 })
-export class SongDisplayerComponent implements OnInit, OnDestroy {
+export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() playlist: Playlist;
   songs: Song[] = [];
 
-  private subscriptions: Subscription[] = [];
+  private songsSubscription: Subscription;
 
   constructor(private songService: SongService) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.songService
-        .getSongsForPlaylist(this.playlist.id)
-        .subscribe((songs) => {
-          this.songs = songs.sort(
-            (a, b) => a.orderInPlaylist - b.orderInPlaylist,
-          );
-        }),
-    );
+    this.fetchSongs();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.playlist) {
+      this.fetchSongs();
+    }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    if (this.songsSubscription) {
+      this.songsSubscription.unsubscribe();
+    }
+  }
+  trackBySongId(_: number, song: Song): number {
+    return song.id;
+  }
+
+  private fetchSongs() {
+    this.songsSubscription = this.songService
+      .getSongsForPlaylist(this.playlist.id)
+      .subscribe((songs) => {
+        const testSong: Song = {
+          id: 123,
+          name: "Test Song",
+          filePath: "assets/playlist/Cobblestone_Village.mp3",
+          playlistID: this.playlist.id,
+          duration: 258000,
+          orderInPlaylist: 1,
+        };
+        this.songs = [testSong, ...songs].sort(
+          (a, b) => a.orderInPlaylist - b.orderInPlaylist,
+        );
+      });
   }
 }

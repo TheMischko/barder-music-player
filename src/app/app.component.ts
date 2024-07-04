@@ -9,7 +9,7 @@ import { ModalService } from "@services/modal.service";
 export class AppComponent {
   constructor(
     private modalService: ModalService,
-    private viewContainerRef: ViewContainerRef,
+    private viewContainerRef: ViewContainerRef
   ) {
     modalService.setRootViewContainerRef(viewContainerRef);
   }

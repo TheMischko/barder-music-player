@@ -41,7 +41,7 @@ export class PlaylistDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.linkToParamMapIdSubscription<Playlist[]>(
         this.playlistService.getChildrenPlaylists$.bind(this.playlistService),
-      ).subscribe((playlists) => {
+      ).subscribe((playlists: Playlist[]) => {
         this.childPlaylists = playlists;
       }),
     );
