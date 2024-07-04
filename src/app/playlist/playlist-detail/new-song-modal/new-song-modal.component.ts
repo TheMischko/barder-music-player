@@ -12,7 +12,6 @@ export class NewSongModalComponent extends ModalComponent<Song> {
   isVisible: boolean = true;
 
   onSubmit(song: Song) {
-    console.log("NewSongModalComponent.onSubmit", song);
     this.close(song);
     this.isVisible = false;
   }
