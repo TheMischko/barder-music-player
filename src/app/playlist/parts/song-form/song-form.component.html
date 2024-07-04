@@ -2,10 +2,12 @@
   <app-form-field>
     <label>Song file:</label>
     <app-file-select formControlName="filePath">
-      <div no-file-template>
+      <div no-file-template class="no-song song-select">
+        <ng-icon name="ionMusicalNotesOutline"></ng-icon>
         <span>Click here to select a file of the song.</span>
       </div>
-      <div file-selected-template>
+      <div file-selected-template class="selected song-select">
+        <ng-icon name="ionMusicalNotes"></ng-icon>
         <span>{{ songForm.get("filePath").value }}</span>
       </div>
     </app-file-select>

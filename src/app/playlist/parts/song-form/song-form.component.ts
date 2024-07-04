@@ -1,6 +1,5 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -13,6 +12,7 @@ import { Song } from "../../../models/music";
 import { FormControl, FormGroup } from "@angular/forms";
 import { debounceTime, firstValueFrom, Observable, Subscription } from "rxjs";
 import { FileService } from "@services/file.service";
+import { SongService } from "@services/song.service";
 
 @Component({
   selector: "app-song-form",
@@ -22,7 +22,6 @@ import { FileService } from "@services/file.service";
 export class SongFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() song: Song | undefined;
   @Input() playlistId: number;
-  @Input() submitElement: ElementRef;
   @Output() submit = new EventEmitter<Song>();
   songForm: FormGroup;
 
@@ -65,12 +64,6 @@ export class SongFormComponent implements OnInit, OnDestroy, OnChanges {
           });
       });
     this.subscriptions.push(pathChangeSub);
-
-    if (this.submitElement) {
-      this.submitElement.nativeElement.addEventListener("click", () => {
-        this.onSubmit();
-      });
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -109,7 +102,7 @@ export class SongFormComponent implements OnInit, OnDestroy, OnChanges {
           name: formData.name,
           filePath: formData.filePath,
           playlistID: formData.playlistId,
-          duration: metaData.duration,
+          duration: SongService.convertSecondsToMillis(metaData.duration),
         });
       });
     });

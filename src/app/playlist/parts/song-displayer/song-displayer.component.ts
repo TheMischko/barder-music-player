@@ -11,6 +11,8 @@ import { Subscription } from "rxjs";
 import { SongService } from "@services/song.service";
 import { Song } from "../../../models/music";
 import { ModalService } from "@services/modal.service";
+import { NewSongModalComponent } from "../../playlist-detail/new-song-modal/new-song-modal.component";
+import { ModalComponent } from "@shared/containers/modal/modal.component";
 
 @Component({
   selector: "app-song-displayer",
@@ -22,6 +24,8 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
   songs: Song[] = [];
 
   private songsSubscription: Subscription;
+  private newModalCloseSubscription: Subscription;
+  private saveNewSongSubscription: Subscription;
 
   constructor(
     private songService: SongService,
@@ -42,9 +46,33 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
     if (this.songsSubscription) {
       this.songsSubscription.unsubscribe();
     }
+    if (this.newModalCloseSubscription) {
+      this.newModalCloseSubscription.unsubscribe();
+    }
+    if (this.saveNewSongSubscription) {
+      this.saveNewSongSubscription.unsubscribe();
+    }
   }
 
-  openNewSongModal() {}
+  openNewSongModal() {
+    const modal: ModalComponent<Song> = this.modalService.open(NewSongModalComponent, {
+      playlistId: this.playlist.id,
+    });
+    this.newModalCloseSubscription = modal.closed.subscribe((song) => {
+      this.newModalCloseSubscription.unsubscribe();
+      this.saveNewSongSubscription = this.songService
+        .saveNewSong({
+          name: song.name,
+          playlistID: this.playlist.id,
+          filePath: song.filePath,
+          duration: song.duration,
+          orderInPlaylist: this.songs.length + 1,
+        })
+        .subscribe((_) => {
+          this.saveNewSongSubscription.unsubscribe();
+        });
+    });
+  }
 
   trackBySongId(_: number, song: Song): number {
     return song.id;
@@ -57,17 +85,7 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
     this.songsSubscription = this.songService
       .getSongsForPlaylist(this.playlist.id)
       .subscribe((songs) => {
-        const testSong: Song = {
-          id: 123,
-          name: "Test Song",
-          filePath: "assets/playlist/Cobblestone_Village.mp3",
-          playlistID: this.playlist.id,
-          duration: 258000,
-          orderInPlaylist: 1,
-        };
-        this.songs = [testSong, ...songs].sort(
-          (a, b) => a.orderInPlaylist - b.orderInPlaylist,
-        );
+        this.songs = songs.sort((a, b) => a.orderInPlaylist - b.orderInPlaylist);
       });
   }
 }

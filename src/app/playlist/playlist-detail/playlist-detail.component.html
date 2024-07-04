@@ -16,10 +16,6 @@
     <h1>{{ playlist?.name ?? "Playlist" }}</h1>
   </div>
   <div class="page-content">
-    <app-new-song-modal
-      *ngIf="playlist?.id"
-      [playlistId]="playlist.id"
-    ></app-new-song-modal>
     <app-collapsible-container title="Playlists">
       <div class="playlist-list card-wrapper">
         <app-add-new-card (click)="openNewPlaylistModal()"></app-add-new-card>

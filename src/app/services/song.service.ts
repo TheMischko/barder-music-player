@@ -41,7 +41,7 @@ export class SongService implements OnDestroy {
     this.subscriptions.push(
       this.tauriService
         .invokeCommand<Song>("create_song", {
-          new_song: songData,
+          newSong: songData,
         })
         .subscribe((song) => {
           this.songs.next([...this.songs.value, song]);
@@ -66,5 +66,13 @@ export class SongService implements OnDestroy {
           this.songs.next(songs);
         }),
     );
+  }
+
+  public static convertSecondsToMillis(seconds: number): number {
+    return Math.floor(seconds * 1000);
+  }
+
+  public static convertMillisToSeconds(milliseconds: number): number {
+    return Math.floor(milliseconds / 1000);
   }
 }
