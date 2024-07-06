@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { BehaviorSubject, Subject, Subscription, takeUntil } from "rxjs";
 import { CreatePlaylistData, Playlist } from "../models/playlist";
-import { Song } from "../models/music";
 import { map } from "rxjs/internal/operators/map";
 import { TauriService } from "@services/tauri.service";
 
@@ -73,18 +72,6 @@ export class PlaylistService implements OnDestroy {
           this.playlists.next([...this.playlists.value, playlist as Playlist]);
         }),
     );
-  }
-
-  addSongToPlaylist(playlistID: number, song: Song) {
-    const playlistIndex = this.playlists.value.findIndex(
-      (playlist) => playlist.id === playlistID,
-    );
-    if (playlistIndex === -1) {
-      throw new Error("Playlist not found");
-    }
-    const playlists = this.playlists.value;
-    playlists[playlistIndex].songs.push(song);
-    this.playlists.next(playlists);
   }
 
   getParentPlaylists(childID: number): Playlist[] {

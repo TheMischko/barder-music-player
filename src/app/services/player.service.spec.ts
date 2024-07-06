@@ -9,19 +9,19 @@ describe("PlayerService", () => {
   let howlMock: HowlMock;
   let playlistMock: Song[] = [
     {
-      id: "0",
+      id: 0,
       name: "Test 1",
       filePath: "song.mp3",
       duration: 100,
     },
     {
-      id: "0",
+      id: 0,
       name: "Test 2",
       filePath: "song2.mp3",
       duration: 100,
     },
     {
-      id: "0",
+      id: 0,
       name: "Test 3",
       filePath: "song3.mp3",
       duration: 100,
