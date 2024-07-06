@@ -10,31 +10,8 @@ import { Song } from "../models/music";
   styleUrl: "./player.component.scss",
 })
 export class PlayerComponent implements OnInit, OnDestroy {
-  private playing: boolean = false;
   playingSong: Song;
   private subscriptions: Subscription[] = [];
-  private playlist: Song[] = [
-    {
-      name: "Cobblestone Village",
-      filePath: "/assets/playlist/Cobblestone_Village.mp3",
-      duration: 258000,
-    },
-    {
-      name: "Market Town",
-      filePath: "/assets/playlist/Market_Town.mp3",
-      duration: 217000,
-    },
-    {
-      name: "Timber Town",
-      filePath: "/assets/playlist/Timber_Town.mp3",
-      duration: 214000,
-    },
-    {
-      name: "Village Atmo KCD",
-      filePath: "/assets/playlist/Village_Atmo_KCD.mp3",
-      duration: 78000,
-    },
-  ];
 
   constructor(
     private playerService: PlayerService,
@@ -43,24 +20,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.playerService.onStartPlaying.subscribe((val) =>
-        this.onStartPlaying(val),
-      ),
+      this.playerService.onStartPlaying.subscribe((val) => this.onStartPlaying(val)),
     );
-    this.playerService.setPlaylist(this.playlist, 0);
-    this.playingSong = this.playlist[0];
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
-
-  onPlayClick() {
-    this.playerService.play();
-  }
-
-  onPauseClick() {
-    this.playerService.pause();
   }
 
   onSeek(newPosition: number) {
@@ -69,6 +34,5 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   private onStartPlaying(song: Song) {
     this.playingSong = song;
-    this.playing = true;
   }
 }

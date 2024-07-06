@@ -13,6 +13,8 @@ import { Song } from "../../../models/music";
 import { ModalService } from "@services/modal.service";
 import { NewSongModalComponent } from "../../playlist-detail/new-song-modal/new-song-modal.component";
 import { ModalComponent } from "@shared/containers/modal/modal.component";
+import { PlayerService } from "@services/player.service";
+import { QueueService } from "@services/queue.service";
 
 @Component({
   selector: "app-song-displayer",
@@ -23,17 +25,38 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() playlist: Playlist;
   songs: Song[] = [];
 
+  isSongAnyPlaying: boolean = false;
+  editMode: boolean = false;
+  playingSongId: number | undefined;
+
   private songsSubscription: Subscription;
   private newModalCloseSubscription: Subscription;
   private saveNewSongSubscription: Subscription;
+  private playerSubscription: Subscription;
+  private playbackStateSubscription: Subscription;
 
   constructor(
     private songService: SongService,
     private modalService: ModalService,
+    private playerService: PlayerService,
+    private queueService: QueueService,
   ) {}
 
   ngOnInit(): void {
     this.fetchSongs();
+    this.playerSubscription = this.queueService
+      .getCurrentSong$()
+      .subscribe((playingSong) => {
+        if (!playingSong) {
+          return;
+        }
+        this.playingSongId = playingSong.id;
+      });
+    this.playbackStateSubscription = this.playerService.playbackState$.subscribe(
+      (isPlaying) => {
+        this.isSongAnyPlaying = isPlaying;
+      },
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -51,6 +74,12 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
     }
     if (this.saveNewSongSubscription) {
       this.saveNewSongSubscription.unsubscribe();
+    }
+    if (this.playerSubscription) {
+      this.playerSubscription.unsubscribe();
+    }
+    if (this.playbackStateSubscription) {
+      this.playbackStateSubscription.unsubscribe();
     }
   }
 
@@ -76,6 +105,34 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
 
   trackBySongId(_: number, song: Song): number {
     return song.id;
+  }
+
+  isSongPlaying(song: Song): boolean {
+    return this.isSongActive(song) && this.isSongAnyPlaying;
+  }
+
+  isSongActive(song: Song): boolean {
+    return this.playingSongId === song.id;
+  }
+
+  async playPauseSong(song: Song) {
+    if (this.isSongPlaying(song)) {
+      this.playerService.pause();
+      return;
+    }
+
+    const currentPlaylistId = this.queueService.currentPlaylistId;
+    if (currentPlaylistId === this.playlist.id) {
+      this.playerService.play();
+      return;
+    }
+
+    const setPlaylistSub = this.playerService
+      .setPlaylist(this.playlist.id, song.id)
+      .subscribe(() => {
+        setPlaylistSub.unsubscribe();
+        this.playerService.play();
+      });
   }
 
   private fetchSongs() {

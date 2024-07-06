@@ -9,6 +9,8 @@ import {
   ionAddCircleOutline,
   ionMusicalNotes,
   ionMusicalNotesOutline,
+  ionPause,
+  ionPlay,
 } from "@ng-icons/ionicons";
 import { CreatePlaylistModalComponent } from "./playlist-landing/create-playlist-modal/create-playlist-modal.component";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -43,6 +45,8 @@ const routes: Routes = [
       ionAddCircleOutline,
       ionMusicalNotes,
       ionMusicalNotesOutline,
+      ionPlay,
+      ionPause,
     }),
     ReactiveFormsModule,
     NgOptimizedImage,

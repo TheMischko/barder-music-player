@@ -11,22 +11,19 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "shell": {
         "all": false,
         "open": true
       },
       "fs": {
-        "all": true,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "copyFile": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
-        "exists": true
+        "scope": ["**"]
+      },
+      "os": {
+        "all": true
+      },
+      "path": {
+        "all": true
       },
       "dialog": {
         "all": true,
@@ -45,7 +42,8 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": {
+      }
     },
     "bundle": {
       "active": true,

@@ -1,23 +1,23 @@
 <div class="controls">
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionShuffle" class="controls-icon"></ng-icon>
+    <ng-icon name="ionShuffle" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionPlayBack" class="controls-icon"></ng-icon>
+    <ng-icon name="ionPlayBack" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true" (click)="playPauseClicked()">
-      <ng-container *ngIf="playPauseState === 'Play'; else pause">
-          <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
-      </ng-container>
-      <ng-template #pause>
-          <ng-icon name="ionPause" class="controls-icon"></ng-icon>
-      </ng-template>
+    <ng-container *ngIf="playPauseState === 'songIsPaused'; else pause">
+      <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
+    </ng-container>
+    <ng-template #pause>
+      <ng-icon name="ionPause" class="controls-icon"></ng-icon>
+    </ng-template>
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true">
-      <ng-icon name="ionPlayForward" class="controls-icon"></ng-icon>
+    <ng-icon name="ionPlayForward" class="controls-icon"></ng-icon>
   </app-button>
 
   <app-loop-control></app-loop-control>

@@ -2,12 +2,39 @@
   <app-button (click)="openNewSongModal()">Add new</app-button>
 </div>
 <div class="songs-container">
-  <div *ngFor="let song of songs; trackBy: trackBySongId" class="song-wrapper">
+  <div class="song-wrapper">
+    <div></div>
+    <div>Name</div>
+    <div>Duration</div>
+    <div></div>
+  </div>
+  <div
+    *ngFor="let song of songs; trackBy: trackBySongId"
+    class="song-wrapper hover {{ isSongActive(song) ? 'active' : '' }}"
+  >
     <div class="song-select">
-      <input type="checkbox" />
+      <div
+        *ngIf="!editMode; else editControls"
+        [ngClass]="{ editMode: 'editing' }"
+        class="song-left-controls"
+      >
+        <app-button color="primary" type="plain" circular (click)="playPauseSong(song)">
+          <ng-container *ngIf="!isSongPlaying(song); else pause">
+            <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
+          </ng-container>
+          <ng-template #pause>
+            <ng-icon name="ionPause" class="controls-icon"></ng-icon>
+          </ng-template>
+        </app-button>
+      </div>
+      <ng-template #editControls>
+        <input type="checkbox" />
+      </ng-template>
     </div>
     <div class="song-title"> {{ song.name }} </div>
     <div class="song-length"> {{ song.duration | songTime: "millis" }} </div>
-    <div class="song-controls"> X </div>
+    <div class="song-controls">
+      <app-button color="danger" type="plain" circular>X</app-button>
+    </div>
   </div>
 </div>

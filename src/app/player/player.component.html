@@ -6,10 +6,7 @@
     <a class="song-playlist player-text unselectable"> Playlist </a>
   </div>
   <div class="player-col central-col">
-    <app-controls
-      (play)="onPlayClick()"
-      (pause)="onPauseClick()"
-    ></app-controls>
+    <app-controls></app-controls>
     <app-playbar (seek)="onSeek($event)"></app-playbar>
   </div>
   <div class="player-col">

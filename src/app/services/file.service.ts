@@ -49,4 +49,17 @@ export class FileService {
       });
     });
   }
+
+  public readMP3ToBase64(path: string, options?: FsOptions): Observable<string> {
+    return new Observable((observer) => {
+      const readSub = this.readBinaryFile(path, options).subscribe(async (data) => {
+        const extension = path.split(".").pop();
+        const base64Str = Buffer.from(data).toString("base64");
+        const contentType = `audio/${extension}`;
+        observer.next(`data:${contentType};base64,${base64Str}`);
+        observer.complete();
+        readSub.unsubscribe();
+      });
+    });
+  }
 }

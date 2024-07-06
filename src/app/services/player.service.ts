@@ -1,10 +1,18 @@
 import { EventEmitter, Injectable, OnDestroy } from "@angular/core";
-import { Howl, HowlOptions } from "howler";
+import { Howl } from "howler";
 import { PlaybackSettingsService } from "@services/playback-settings.service";
-import { interval, Subscription } from "rxjs";
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  interval,
+  Observable,
+  Subscription,
+} from "rxjs";
 import { LoopState } from "../player/player.component.model";
 import { Song, SongProgress } from "../models/music";
 import { ProgressService } from "../player/progress.service";
+import { FileService } from "@services/file.service";
+import { QueueService } from "@services/queue.service";
 
 @Injectable({
   providedIn: "root",
@@ -17,22 +25,25 @@ export class PlayerService implements OnDestroy {
   public onPlaying = new EventEmitter<SongProgress>();
 
   private playingSong: Howl;
-  private nextSong: Howl;
-  private nextSongIndex: number;
-  private playlist: Howl[];
-  private songlist: Song[];
-  private playlistIndex: number;
+  private songIdHowlMapping: { [key: string]: Howl | null } = {};
   private readonly progressCheckInterval = 250;
   private readonly preloadTimePortion = 0.9;
   private playingSongID: number;
+  private isPlaying: boolean = false;
+  private currentPlayingSongId: number | null = null;
+  private playbackState = new BehaviorSubject<boolean>(false);
 
   private settingsSubscriptions: Subscription[] = [];
   private progressSubscription: Subscription;
+  private readonly songSubscription: Subscription;
+
   private songEventsAttached: boolean = false;
 
   constructor(
     private playbackSettings: PlaybackSettingsService,
     private progressService: ProgressService,
+    private fileService: FileService,
+    private queueService: QueueService,
   ) {
     this.settingsSubscriptions.push(
       this.playbackSettings.volume$.subscribe((volume) => {
@@ -55,37 +66,82 @@ export class PlayerService implements OnDestroy {
         }
       }),
     );
+    this.songSubscription = this.queueService.getCurrentSong$().subscribe((song) => {
+      if (song) {
+        this.playSong(song).then((_) => {});
+      }
+    });
   }
 
   ngOnDestroy() {
     this.settingsSubscriptions.forEach((sub) => sub.unsubscribe());
-  }
-
-  public setPlaylist(playlist: Song[], startIndex: number = 0) {
-    this.songlist = [];
-    this.playlist = [];
-    playlist.forEach((song: Song) => {
-      this.songlist.push(song);
-      this.playlist.push(
-        this.createHowl({
-          src: [song.filePath],
-        }),
-      );
-    });
-    this.playlistIndex = startIndex;
-    this.play();
-    this.pause();
-  }
-
-  public play(): void {
-    if (this.currentSongNotExistsOrOver) {
-      this.prepareSong();
+    if (this.songSubscription) {
+      this.songSubscription.unsubscribe();
     }
-    this.playingSongID = this.playingSong.play();
   }
 
+  public get playbackState$(): Observable<boolean> {
+    return this.playbackState.asObservable();
+  }
+
+  /**
+   * Adds playlist to the queue and preloads first song.
+   * @param playlistId
+   * @param startSongId
+   */
+  public setPlaylist(playlistId: number, startSongId: number): Observable<never> {
+    return new Observable<never>((observer) => {
+      let setupSub = this.queueService
+        .setPlaylist(playlistId, {
+          startWithSongId: startSongId,
+          includeChildren: false,
+          shuffle: false,
+        })
+        .subscribe((songs: Song[]) => {
+          this.prepareSongHowlMapping(songs);
+          const currentSongSub = this.queueService
+            .getCurrentSong$()
+            .subscribe((currentSong) => {
+              const preloadSub = this.preloadSong(currentSong).subscribe(() => {
+                observer.next();
+                observer.complete();
+                preloadSub.unsubscribe();
+                currentSongSub.unsubscribe();
+                setupSub.unsubscribe();
+              });
+            });
+        });
+    });
+  }
+
+  /**
+   * Starts or resume playing current song.
+   */
+  public play(): void {
+    if (!this.isPlaying) {
+      this.isPlaying = true;
+      this.playbackState.next(this.isPlaying);
+    }
+    if (this.currentSongNotExistsOrOver) {
+      const currentSongSub = this.queueService
+        .getCurrentSong$()
+        .subscribe((currentSong) => {
+          this.playSong(currentSong).then((_) => {
+            currentSongSub.unsubscribe();
+          });
+        });
+    } else {
+      this.playingSongID = this.playingSong.play();
+    }
+  }
+
+  /**
+   * Pauses current song.
+   */
   public pause(): void {
     if (this.playingSong) {
+      this.isPlaying = false;
+      this.playbackState.next(this.isPlaying);
       this.playingSong.pause();
     }
   }
@@ -112,13 +168,23 @@ export class PlayerService implements OnDestroy {
     );
   }
 
-  private prepareSong() {
-    if (this.nextSong === undefined) {
-      this.playingSong = this.playlist[this.playlistIndex];
-    } else {
-      this.playingSong = this.nextSong;
-      this.nextSong = undefined;
+  private async playSong(song: Song) {
+    if (this.currentPlayingSongId === song.id && this.isPlaying) {
+      return;
     }
+    if (!this.isPlaying) {
+      this.isPlaying = true;
+      this.playbackState.next(this.isPlaying);
+    }
+
+    this.currentPlayingSongId = song.id;
+
+    if (this.songIdHowlMapping[song.id] === null || !this.songIdHowlMapping[song.id]) {
+      await firstValueFrom(this.preloadSong(song));
+    }
+
+    this.playingSong = this.songIdHowlMapping[song.id];
+
     const loop: boolean = this.playbackSettings.loop$.getValue() === LoopState.Current;
     const volume: number = this.playbackSettings.volume$.getValue();
     const mute: boolean = this.playbackSettings.mute$.getValue();
@@ -128,27 +194,33 @@ export class PlayerService implements OnDestroy {
     this.playingSong.mute(mute);
 
     if (!this.songEventsAttached) {
-      this.playingSong.on("load", () => {
-        this.onLoad.emit();
-      });
-      this.playingSong.on("play", () => {
-        this.onStartPlaying.emit(this.songlist[this.playlistIndex]);
-        this.progressService.updateCurrentDurationMillis(
-          this.songlist[this.playlistIndex].duration,
-        );
-        this.startProgressTracking();
-      });
-      this.playingSong.on("pause", () => {
-        this.onPause.emit();
-      });
-      this.playingSong.on("end", () => {
-        this.stopProgressTracking();
-        this.onEndPlaying.emit();
-        this.playNextSong();
-        this.songEventsAttached = false;
-      });
+      this.attachSongEvents(song);
+      this.songEventsAttached = true;
     }
-    this.songEventsAttached = true;
+
+    this.playingSongID = this.playingSong.play();
+  }
+
+  private attachSongEvents(song: Song) {
+    this.playingSong.on("load", () => {
+      this.onLoad.emit();
+    });
+    this.playingSong.on("play", () => {
+      this.onStartPlaying.emit(song);
+      this.progressService.updateCurrentDurationMillis(song.duration);
+      this.startProgressTracking();
+    });
+    this.playingSong.on("pause", () => {
+      this.onPause.emit();
+    });
+    this.playingSong.on("end", () => {
+      this.stopProgressTracking();
+      this.onEndPlaying.emit();
+      this.queueService.playNextSong();
+      this.isPlaying = false;
+      this.currentPlayingSongId = null;
+      this.songEventsAttached = false;
+    });
   }
 
   private startProgressTracking() {
@@ -163,7 +235,10 @@ export class PlayerService implements OnDestroy {
       this.progressService.updatePlayedLengthMillis(position);
 
       if (position / duration >= this.preloadTimePortion) {
-        this.preloadNextSong();
+        const nextSongSub = this.queueService.getNextSong$().subscribe((nextSong) => {
+          this.preloadSong(nextSong);
+          nextSongSub.unsubscribe();
+        });
       }
     });
   }
@@ -174,56 +249,44 @@ export class PlayerService implements OnDestroy {
     }
   }
 
-  private get isCurrentLastSong(): boolean {
-    return this.playlistIndex >= this.playlist.length - 1;
+  private prepareSongHowlMapping(songs: Song[]): void {
+    this.songIdHowlMapping = {};
+    songs.forEach((song) => {
+      this.songIdHowlMapping[song.id] = null;
+    });
   }
 
-  /**
-   * Returns true if current song is last in playlist and the playlist is not repeating, or current song should loop
-   * @private
-   */
-  private get shouldNotPlayNextSong(): boolean {
-    const loop = this.playbackSettings.loop$.getValue();
-    return (
-      loop === LoopState.Current || (this.isCurrentLastSong && loop != LoopState.Playlist)
-    );
+  private preloadSong(song: Song): Observable<never> {
+    return new Observable((observer) => {
+      const songHowlSub = this.createHowl(song).subscribe((howl) => {
+        this.songIdHowlMapping[song.id] = howl;
+        observer.next();
+        observer.complete();
+        songHowlSub.unsubscribe();
+      });
+    });
   }
 
-  private get nextSongIsLoading() {
-    const state = this.nextSong.state();
-    return state === "loading" || state === "loaded";
-  }
-
-  private preloadNextSong() {
-    if (this.shouldNotPlayNextSong) {
-      return;
-    }
-    if (this.nextSong && this.nextSongIsLoading) {
-      return;
-    }
-    this.nextSongIndex = this.isCurrentLastSong ? 0 : this.playlistIndex + 1;
-    this.nextSong = this.playlist[this.nextSongIndex].load();
-  }
-
-  private playNextSong() {
-    if (this.shouldNotPlayNextSong) {
-      return;
-    }
-    this.playingSong.unload();
-    if (this.nextSong) {
-      this.playlistIndex = this.nextSongIndex;
-      this.songEventsAttached = false;
-      this.prepareSong();
-      this.play();
-      return;
-    }
-    this.playlistIndex = this.isCurrentLastSong ? 0 : this.playlistIndex + 1;
-    this.songEventsAttached = false;
-    this.prepareSong();
-    this.play();
-  }
-
-  createHowl(options: HowlOptions): Howl {
-    return new Howl(options);
+  createHowl(song: Song): Observable<Howl> {
+    return new Observable((observer) => {
+      if (!song.filePath.includes("assets")) {
+        let sourceSub = this.fileService
+          .readMP3ToBase64(song.filePath)
+          .subscribe((convertedSrc) => {
+            const howl = new Howl({
+              src: [convertedSrc],
+            });
+            observer.next(howl);
+            observer.complete();
+            sourceSub.unsubscribe();
+          });
+        return;
+      }
+      const howl = new Howl({
+        src: [song.filePath],
+      });
+      observer.next(howl);
+      observer.complete();
+    });
   }
 }

@@ -1,8 +1,10 @@
 <app-base-modal [isVisible]="isVisible">
   <app-song-form #songForm [playlistId]="playlistId" (submit)="onSubmit($event)">
   </app-song-form>
-  <app-button type="fill" color="primary" (click)="songForm.onSubmit()"
-    >Create</app-button
-  >
-  <app-button type="fill" color="primary" (click)="close(null)">Cancel</app-button>
+  <div class="row button-row">
+    <app-button type="fill" color="primary" (click)="songForm.onSubmit()"
+      >Create</app-button
+    >
+    <app-button type="fill" color="danger" (click)="close(null)">Cancel</app-button>
+  </div>
 </app-base-modal>
