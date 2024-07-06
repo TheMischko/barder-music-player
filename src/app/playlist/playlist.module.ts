@@ -17,6 +17,7 @@ import { PlaylistDetailComponent } from "./playlist-detail/playlist-detail.compo
 import { SongDisplayerComponent } from "./parts/song-displayer/song-displayer.component";
 import { SongFormComponent } from "./parts/song-form/song-form.component";
 import { NewSongModalComponent } from "./playlist-detail/new-song-modal/new-song-modal.component";
+import { SongTimePipe } from "../pipes/song-time.pipe";
 
 const routes: Routes = [
   { path: "", component: PlaylistLandingComponent },
@@ -45,6 +46,7 @@ const routes: Routes = [
     }),
     ReactiveFormsModule,
     NgOptimizedImage,
+    SongTimePipe,
   ],
 })
 export class PlaylistModule {}

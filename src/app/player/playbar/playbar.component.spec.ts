@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PlaybarComponent } from './playbar.component';
-import {SliderComponent} from "@shared/controls/slider/slider.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { PlaybarComponent } from "./playbar.component";
+import { SliderComponent } from "@shared/controls/slider/slider.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { SongTimePipe } from "../../pipes/song-time.pipe";
 
-describe('PlaybarComponent', () => {
+describe("PlaybarComponent", () => {
   let component: PlaybarComponent;
   let fixture: ComponentFixture<PlaybarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PlaybarComponent, SliderComponent],
-      imports: [FormsModule, ReactiveFormsModule]
-    })
-    .compileComponents();
+      imports: [FormsModule, ReactiveFormsModule, SongTimePipe],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PlaybarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

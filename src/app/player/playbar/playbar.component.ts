@@ -10,7 +10,6 @@ import {
 import { FormControl } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { ProgressService } from "../progress.service";
-import { SongService } from "@services/song.service";
 
 @Component({
   selector: "app-playbar",
@@ -55,27 +54,11 @@ export class PlaybarComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  get trackLengthTime(): string {
-    return this.convertMillisToTime(this.trackLengthMillis);
-  }
-
-  get playedLengthTime(): string {
-    return this.convertMillisToTime(Number(this.sliderValue.value));
-  }
-
   onMouseDown() {
     this.changing = true;
   }
 
   onMouseUp() {
     this.changing = false;
-  }
-
-  private convertMillisToTime(milliseconds: number): string {
-    let seconds = SongService.convertMillisToSeconds(milliseconds);
-    let minutes = Math.floor(seconds / 60);
-    seconds = seconds % 60;
-    minutes = minutes % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 }

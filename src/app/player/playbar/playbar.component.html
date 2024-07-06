@@ -1,18 +1,18 @@
 <div class="playbar">
-    <span class="time unselectable">
-        {{playedLengthTime}}
-    </span>
-    <div class="slider">
-        <app-slider
-               [min]="0"
-               [max]="trackLengthMillis"
-               [stepSize]="1"
-               [formControl]="sliderValue"
-               (mousedown)="onMouseDown()"
-               (mouseup)="onMouseUp()"
-        />
-    </div>
-    <span class="time unselectable">
-        {{trackLengthTime}}
-    </span>
+  <span class="time unselectable">
+    {{ sliderValue.value | songTime: "millis" }}
+  </span>
+  <div class="slider">
+    <app-slider
+      [min]="0"
+      [max]="trackLengthMillis"
+      [stepSize]="1"
+      [formControl]="sliderValue"
+      (mousedown)="onMouseDown()"
+      (mouseup)="onMouseUp()"
+    />
+  </div>
+  <span class="time unselectable">
+    {{ trackLengthMillis | songTime: "millis" }}
+  </span>
 </div>
