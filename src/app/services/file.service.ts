@@ -8,6 +8,7 @@ import { MP3Data } from "../models/music";
   providedIn: "root",
 })
 export class FileService {
+  public static UNKNOWN_SONG_TITLE = "Unknown song";
   constructor() {}
 
   public fileExists(path: string): Observable<boolean> {
@@ -42,7 +43,7 @@ export class FileService {
       this.readBinaryFile(path, options).subscribe(async (data) => {
         const metaData = await musicMetadata.parseBlob(new Blob([data]));
         observer.next({
-          title: metaData.common.title || "Unknown song",
+          title: metaData.common.title || FileService.UNKNOWN_SONG_TITLE,
           duration: metaData.format.duration || 0,
           artist: metaData.common.artist || null,
         });

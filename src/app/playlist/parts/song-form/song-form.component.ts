@@ -13,6 +13,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { debounceTime, firstValueFrom, Observable, Subscription } from "rxjs";
 import { FileService } from "@services/file.service";
 import { SongService } from "@services/song.service";
+import { SongUtils } from "../../../utils/song.utils";
 
 @Component({
   selector: "app-song-form",
@@ -55,11 +56,27 @@ export class SongFormComponent implements OnInit, OnDestroy, OnChanges {
               if (this.mp3ReadSubscription) {
                 this.mp3ReadSubscription.unsubscribe();
               }
-              this.mp3ReadSubscription = this.fileService
-                .readMP3Data(filePath)
-                .subscribe((metaData) => {
-                  this.songForm.get("name").setValue(metaData.title);
-                });
+
+              this.mp3ReadSubscription = SongUtils.getNameFromPath(
+                filePath,
+                this.fileService,
+              ).subscribe({
+                next: (title) => {
+                  if (
+                    title &&
+                    title.length > 0 &&
+                    title !== FileService.UNKNOWN_SONG_TITLE
+                  ) {
+                    this.songForm.get("name").setValue(title);
+                  }
+                },
+                error: (err) => {
+                  this.songForm.get("filePath").setErrors(err);
+                },
+                complete: () => {
+                  this.mp3ExistsSubscription.unsubscribe();
+                },
+              });
             }
           });
       });
