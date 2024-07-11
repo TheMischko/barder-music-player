@@ -74,4 +74,20 @@ export class ControlsComponent implements OnInit, OnDestroy {
     }
     this.loop.emit(this.loopState);
   }
+
+  handlePrevButtonHover() {
+    this.playerService.preloadPrevSong();
+  }
+
+  handleNextButtonHover() {
+    this.playerService.preloadNextSong();
+  }
+
+  playNextClicked() {
+    this.playerService.forcePlayNextSong();
+  }
+
+  playPrevClicked() {
+    this.playerService.forcePlayPrevSong();
+  }
 }

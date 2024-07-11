@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { Song } from "../models/music";
 import { BehaviorSubject, firstValueFrom, Observable, Subscription } from "rxjs";
 import { PlaylistService } from "@services/playlist.service";
@@ -15,7 +15,7 @@ export interface SetPlaylistArgs {
 @Injectable({
   providedIn: "root",
 })
-export class QueueService implements OnInit, OnDestroy {
+export class QueueService implements OnDestroy {
   private playlist: Song[] | null = null;
   private currentSongIndex: number = -1;
   private playedSongs: Song[] = [];
@@ -31,9 +31,7 @@ export class QueueService implements OnInit, OnDestroy {
     private playlistService: PlaylistService,
     private songService: SongService,
     private playbackSettingsService: PlaybackSettingsService,
-  ) {}
-
-  ngOnInit() {
+  ) {
     this.loopChangeSubscription = this.playbackSettingsService.loop$.subscribe((loop) => {
       this.loop = loop;
     });
@@ -117,6 +115,19 @@ export class QueueService implements OnInit, OnDestroy {
 
   public getNextSong$(): Observable<Song> {
     return this.nextSong.asObservable();
+  }
+
+  public getPrevSong$(): Observable<Song | undefined> {
+    return new Observable<Song | undefined>((observer) => {
+      if (this.playedSongs.length === 0) {
+        observer.next(undefined);
+        observer.complete();
+        return;
+      }
+
+      observer.next(this.playedSongs[this.playedSongs.length - 1]);
+      observer.complete();
+    });
   }
 
   // Advances the queue to the next song.

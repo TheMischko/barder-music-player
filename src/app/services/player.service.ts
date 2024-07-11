@@ -171,6 +171,45 @@ export class PlayerService implements OnDestroy {
     this.playingSong.seek(newPosition, this.playingSongID);
   }
 
+  public preloadNextSong() {
+    this.queueService.getNextSong$().subscribe({
+      next: (nextSong) => {
+        if (this.songIdHowlMapping[nextSong.id]) {
+          return;
+        }
+        this.preloadSong(nextSong);
+      },
+    });
+  }
+
+  public preloadPrevSong() {
+    this.queueService.getPrevSong$().subscribe({
+      next: (prevSong) => {
+        if (prevSong === undefined) {
+          return;
+        }
+        if (this.songIdHowlMapping[prevSong.id]) {
+          return;
+        }
+        this.preloadSong(prevSong);
+      },
+    });
+  }
+
+  public forcePlayNextSong() {
+    this.playingSong.stop();
+    this.cleanAfterSongEnd();
+    this.onEndPlaying.emit();
+    this.queueService.playNextSong();
+  }
+
+  public forcePlayPrevSong() {
+    this.playingSong.stop();
+    this.cleanAfterSongEnd();
+    this.onEndPlaying.emit();
+    this.queueService.playPreviousSong();
+  }
+
   private get currentSongNotExistsOrOver() {
     return (
       this.playingSong === undefined ||
@@ -196,7 +235,7 @@ export class PlayerService implements OnDestroy {
 
     this.playingSong = this.songIdHowlMapping[song.id];
 
-    const loop: boolean = this.playbackSettings.loop$.getValue() === LoopState.Current;
+    const loop: boolean = this.playbackSettings.loop$.value === LoopState.Current;
     const volume: number = this.playbackSettings.volume$.getValue();
     const mute: boolean = this.playbackSettings.mute$.getValue();
 
@@ -227,13 +266,9 @@ export class PlayerService implements OnDestroy {
       this.onPause.emit();
     });
     this.playingSong.on("end", () => {
-      this.stopProgressTracking();
+      this.cleanAfterSongEnd();
       this.onEndPlaying.emit();
       this.queueService.playNextSong();
-      this.isPlaying = false;
-      this.currentPlayingSongId = null;
-      this.songEventsAttached = false;
-      this.preloadingNextSong = false;
     });
   }
 
@@ -287,6 +322,14 @@ export class PlayerService implements OnDestroy {
         songHowlSub.unsubscribe();
       });
     });
+  }
+
+  private cleanAfterSongEnd() {
+    this.stopProgressTracking();
+    this.isPlaying = false;
+    this.currentPlayingSongId = null;
+    this.songEventsAttached = false;
+    this.preloadingNextSong = false;
   }
 
   createHowl(song: Song): Observable<Howl> {

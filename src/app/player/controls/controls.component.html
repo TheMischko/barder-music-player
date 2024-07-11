@@ -3,7 +3,13 @@
     <ng-icon name="ionShuffle" class="controls-icon"></ng-icon>
   </app-button>
 
-  <app-button color="primary" type="plain" [circular]="true">
+  <app-button
+    color="primary"
+    type="plain"
+    [circular]="true"
+    (mouseenter)="handlePrevButtonHover()"
+    (click)="playPrevClicked()"
+  >
     <ng-icon name="ionPlayBack" class="controls-icon"></ng-icon>
   </app-button>
 
@@ -21,7 +27,13 @@
     </ng-template>
   </app-button>
 
-  <app-button color="primary" type="plain" [circular]="true">
+  <app-button
+    color="primary"
+    type="plain"
+    [circular]="true"
+    (mouseenter)="handleNextButtonHover()"
+    (click)="playNextClicked()"
+  >
     <ng-icon name="ionPlayForward" class="controls-icon"></ng-icon>
   </app-button>
 
