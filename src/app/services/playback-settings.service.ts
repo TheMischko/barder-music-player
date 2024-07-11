@@ -21,7 +21,7 @@ export class PlaybackSettingsService {
     if (value > 100) {
       throw new Error("Cannot set volume above one.");
     }
-    this._volume.next(PlaybackSettingsService.parseVolumeLog(value));
+    this._volume.next(PlaybackSettingsService.parseRawVolumeToScaled(value));
   }
   public get volume$(): BehaviorSubject<number> {
     return this._volume;
@@ -44,19 +44,27 @@ export class PlaybackSettingsService {
   constructor() {}
 
   /**
-   * Takes volume in range (0,100) and scales it to a range of (0,1) with logarithmic scale.
+   * Takes volume in range (0,100) and scales it to a range of (0,1) on custom scale.
    * @param rawVal number
    * @private
    */
-  public static parseVolumeLog(rawVal: number) {
-    return Math.log10(1 + 9 * (rawVal / 100));
+  public static parseRawVolumeToScaled(rawVal: number): number {
+    if (rawVal <= 50) {
+      return rawVal * (0.25 / 50);
+    } else {
+      return 0.25 + (rawVal - 50) * (0.75 / 50);
+    }
   }
 
   /**
-   * Takes volume used for audio output on logarithmic scale and scales it back to a range of (0, 100) on linear scale.
+   * Takes volume used for audio output on custom scale and scales it back to a range of (0, 100) on linear scale.
    * @param scaledValue
    */
-  public static parseLogVolumeToLinear(scaledValue: number) {
-    return ((Math.pow(10, scaledValue) - 1) / 9) * 100;
+  public static parseScaledVolumeToLinear(scaledValue: number): number {
+    if (scaledValue <= 0.25) {
+      return scaledValue * (50 / 0.25);
+    } else {
+      return 50 + (scaledValue - 0.25) * (50 / 0.75);
+    }
   }
 }
