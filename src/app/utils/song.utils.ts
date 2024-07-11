@@ -1,6 +1,8 @@
 import { Observable } from "rxjs";
 import { FileService } from "@services/file.service";
 import { path as Path } from "@tauri-apps/api";
+import { MP3Data } from "../models/music";
+import { IAudioMetadata } from "music-metadata-browser";
 
 export class SongUtils {
   public static getNameFromPath(
@@ -15,8 +17,20 @@ export class SongUtils {
         subscriber.complete();
         metadataSub.unsubscribe();
       });
-      Path.basename(filepath).then((filename) => {
+    });
+  }
+
+  public static getNameFromMetadataOrFile(metadata: IAudioMetadata, songPath: string) {
+    return new Observable<string>((subscriber) => {
+      if (metadata.common?.title?.length > 0) {
+        subscriber.next(metadata.common.title);
+        subscriber.complete();
+        return;
+      }
+
+      Path.basename(songPath).then((filename) => {
         subscriber.next(SongUtils.parseNameFromFileName(filename));
+        subscriber.complete();
       });
     });
   }

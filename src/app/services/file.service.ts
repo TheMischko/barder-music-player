@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { exists, FsOptions, readBinaryFile, readTextFile } from "@tauri-apps/api/fs";
-import { Observable } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
 import * as musicMetadata from "music-metadata-browser";
 import { MP3Data } from "../models/music";
+import { SongUtils } from "../utils/song.utils";
 
 @Injectable({
   providedIn: "root",
@@ -42,8 +43,11 @@ export class FileService {
     return new Observable((observer) => {
       this.readBinaryFile(path, options).subscribe(async (data) => {
         const metaData = await musicMetadata.parseBlob(new Blob([data]));
+        const name = await firstValueFrom(
+          SongUtils.getNameFromMetadataOrFile(metaData, path),
+        );
         observer.next({
-          title: metaData.common.title || FileService.UNKNOWN_SONG_TITLE,
+          title: name,
           duration: metaData.format.duration || 0,
           artist: metaData.common.artist || null,
         });

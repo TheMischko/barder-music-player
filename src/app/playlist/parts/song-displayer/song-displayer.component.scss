@@ -12,12 +12,17 @@
   width: 100%;
 }
 .songs-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2px;
   margin-top: 10px;
   height: 100%;
   width: 100%;
+
+  &.dragging .song-wrapper {
+    opacity: 0;
+  }
 }
 .song-wrapper {
   display: grid;
@@ -27,7 +32,9 @@
   background: transparent;
   transition:
     background-color 0.2s ease-in-out,
-    color 0.5s ease-in-out;
+    color 0.5s ease-in-out,
+    opacity 0.1s ease-in-out;
+  opacity: 1;
   color: $color-grey-200;
   width: 100%;
   &.hover:hover {
@@ -48,4 +55,20 @@
 }
 .song-wrapper:hover .song-left-controls {
   opacity: 1;
+}
+
+.drag-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  outline: transparent 3px solid;
+  border: $color-text-primary 3px dashed;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

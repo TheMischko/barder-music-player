@@ -1,7 +1,22 @@
 <div class="song-display-header">
   <app-button (click)="openNewSongModal()">Add new</app-button>
 </div>
-<div class="songs-container">
+<div
+  class="songs-container"
+  [ngClass]="{
+    dragging: (areFilesDraggedOver | async) || (filesUploadingProgress | async) < 1,
+  }"
+>
+  <div
+    *ngIf="(areFilesDraggedOver | async) || (filesUploadingProgress | async) < 1"
+    class="drag-text"
+  >
+    <ng-container *ngIf="(filesUploadingProgress | async) < 1; else justDragging">
+      <app-loader size="medium"></app-loader>
+      Uploading... ({{ filesUploadingProgress | async | percent }})
+    </ng-container>
+    <ng-template #justDragging> Put your files here. </ng-template>
+  </div>
   <div class="song-wrapper">
     <div></div>
     <div>Name</div>

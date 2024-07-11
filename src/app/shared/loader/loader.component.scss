@@ -1,0 +1,24 @@
+:host ng-icon {
+  animation: 2s linear normal none infinite running spin;
+  &.small {
+    --ng-icon__size: 1rem !important;
+  }
+  &.medium {
+    --ng-icon__size: 2rem !important;
+  }
+  &.large {
+    --ng-icon__size: 3rem !important;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  50% {
+    transform: rotateZ(180deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}

@@ -14,6 +14,8 @@ import { FormFieldComponent } from "./containers/form-field/form-field.component
 import { CollapsibleContainerComponent } from "./collapsible-container/collapsible-container.component";
 import { ionChevronDownSharp } from "@ng-icons/ionicons";
 import { FileSelectComponent } from "./controls/file-select/file-select.component";
+import { LoaderComponent } from "./loader/loader.component";
+import { featherLoader } from "@ng-icons/feather-icons";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { FileSelectComponent } from "./controls/file-select/file-select.componen
     FormFieldComponent,
     CollapsibleContainerComponent,
     FileSelectComponent,
+    LoaderComponent,
   ],
   exports: [
     ButtonComponent,
@@ -39,10 +42,15 @@ import { FileSelectComponent } from "./controls/file-select/file-select.componen
     BaseModalComponent,
     CollapsibleContainerComponent,
     FileSelectComponent,
+    LoaderComponent,
   ],
   imports: [
     CommonModule,
-    NgIconsModule.withIcons({ heroArrowDownCircleSolid, ionChevronDownSharp }),
+    NgIconsModule.withIcons({
+      heroArrowDownCircleSolid,
+      ionChevronDownSharp,
+      featherLoader,
+    }),
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
