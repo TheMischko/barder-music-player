@@ -48,7 +48,24 @@ export class QueueService implements OnInit, OnDestroy {
   }
 
   public setPlaylist(playlistId: number, args?: SetPlaylistArgs): Observable<Song[]> {
+    this.playedSongs = [];
     return new Observable((observer) => {
+      if (this.currentPlaylistId === playlistId) {
+        this.playlist = this.shuffleArray(this.playlist);
+
+        if (args?.startWithSongId) {
+          this.currentSongIndex = this.playlist.findIndex(
+            (song) => song.id === args.startWithSongId,
+          );
+        } else {
+          this.currentSongIndex = 0;
+        }
+
+        this.updateCurrentAndNextSongs();
+
+        observer.next(this.playlist);
+        observer.complete();
+      }
       this.getSongsOfPlaylist(playlistId).then(async (songs: Song[]) => {
         this._currentPlaylistId = playlistId;
         if (args?.includeChildren) {
@@ -104,6 +121,7 @@ export class QueueService implements OnInit, OnDestroy {
 
   // Advances the queue to the next song.
   public playNextSong(): void {
+    this.playedSongs.push(this.playlist[this.currentSongIndex]);
     if (this.currentSongIndex < this.playlist.length - 1) {
       this.currentSongIndex++;
     } else if (this.shouldLoop) {

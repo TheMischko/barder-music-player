@@ -29,9 +29,7 @@ import { PlayerService } from "@services/player.service";
 import { QueueService } from "@services/queue.service";
 import { listen, UnlistenFn, Event } from "@tauri-apps/api/event";
 import { path as Path } from "@tauri-apps/api";
-import { SongUtils } from "../../../utils/song.utils";
 import { FileService } from "@services/file.service";
-import { map } from "rxjs/internal/operators/map";
 
 @Component({
   selector: "app-song-displayer",
@@ -153,8 +151,8 @@ export class SongDisplayerComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    const currentPlaylistId = this.queueService.currentPlaylistId;
-    if (currentPlaylistId === this.playlist.id) {
+    const playingSong = await firstValueFrom(this.queueService.getCurrentSong$());
+    if (song.id === playingSong?.id) {
       this.playerService.play();
       return;
     }

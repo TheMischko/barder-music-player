@@ -8,11 +8,16 @@
   </app-button>
 
   <app-button color="primary" type="plain" [circular]="true" (click)="playPauseClicked()">
-    <ng-container *ngIf="playPauseState === 'songIsPaused'; else pause">
-      <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
+    <ng-container *ngIf="!songIsLoading; else loader">
+      <ng-container *ngIf="playPauseState === 'songIsPaused'; else pause">
+        <ng-icon name="ionPlay" class="controls-icon"></ng-icon>
+      </ng-container>
+      <ng-template #pause>
+        <ng-icon name="ionPause" class="controls-icon"></ng-icon>
+      </ng-template>
     </ng-container>
-    <ng-template #pause>
-      <ng-icon name="ionPause" class="controls-icon"></ng-icon>
+    <ng-template #loader>
+      <app-loader></app-loader>
     </ng-template>
   </app-button>
 

@@ -9,7 +9,7 @@ import {
   Subscription,
 } from "rxjs";
 import { LoopState } from "../player/player.component.model";
-import { Song, SongProgress } from "../models/music";
+import { Song } from "../models/music";
 import { ProgressService } from "../player/progress.service";
 import { FileService } from "@services/file.service";
 import { QueueService } from "@services/queue.service";
@@ -22,7 +22,6 @@ export class PlayerService implements OnDestroy {
   public onStartPlaying = new EventEmitter<Song>();
   public onPause = new EventEmitter();
   public onEndPlaying = new EventEmitter();
-  public onPlaying = new EventEmitter<SongProgress>();
 
   private playingSong: Howl;
   private songIdHowlMapping: { [key: string]: Howl | null } = {};
@@ -32,10 +31,12 @@ export class PlayerService implements OnDestroy {
   private isPlaying: boolean = false;
   private currentPlayingSongId: number | null = null;
   private playbackState = new BehaviorSubject<boolean>(false);
+  private songLoadingState = new BehaviorSubject<boolean>(false);
 
   private settingsSubscriptions: Subscription[] = [];
   private progressSubscription: Subscription;
   private readonly songSubscription: Subscription;
+  private preloadingNextSong: boolean = false;
 
   private songEventsAttached: boolean = false;
 
@@ -67,7 +68,12 @@ export class PlayerService implements OnDestroy {
       }),
     );
     this.songSubscription = this.queueService.getCurrentSong$().subscribe((song) => {
+      if (this.playingSong) {
+        this.playingSong?.stop();
+      }
+
       if (song) {
+        this.songEventsAttached = false;
         this.playSong(song).then((_) => {});
       }
     });
@@ -82,6 +88,10 @@ export class PlayerService implements OnDestroy {
 
   public get playbackState$(): Observable<boolean> {
     return this.playbackState.asObservable();
+  }
+
+  public get songLoadingState$(): Observable<boolean> {
+    return this.songLoadingState.asObservable();
   }
 
   /**
@@ -179,6 +189,7 @@ export class PlayerService implements OnDestroy {
 
     this.currentPlayingSongId = song.id;
 
+    this.songLoadingState.next(true);
     if (this.songIdHowlMapping[song.id] === null || !this.songIdHowlMapping[song.id]) {
       await firstValueFrom(this.preloadSong(song));
     }
@@ -198,11 +209,13 @@ export class PlayerService implements OnDestroy {
       this.songEventsAttached = true;
     }
 
+    this.songLoadingState.next(this.playingSong.state() !== "loaded");
     this.playingSongID = this.playingSong.play();
   }
 
   private attachSongEvents(song: Song) {
     this.playingSong.on("load", () => {
+      this.songLoadingState.next(this.playingSong.state() !== "loaded");
       this.onLoad.emit();
     });
     this.playingSong.on("play", () => {
@@ -220,6 +233,7 @@ export class PlayerService implements OnDestroy {
       this.isPlaying = false;
       this.currentPlayingSongId = null;
       this.songEventsAttached = false;
+      this.preloadingNextSong = false;
     });
   }
 
@@ -235,10 +249,18 @@ export class PlayerService implements OnDestroy {
       this.progressService.updatePlayedLengthMillis(position);
 
       if (position / duration >= this.preloadTimePortion) {
-        const nextSongSub = this.queueService.getNextSong$().subscribe((nextSong) => {
-          this.preloadSong(nextSong);
-          nextSongSub.unsubscribe();
-        });
+        const nextSongSub = this.queueService
+          .getNextSong$()
+          .subscribe(async (nextSong) => {
+            if (this.preloadingNextSong || this.songIdHowlMapping[nextSong.id] !== null) {
+              return;
+            }
+            this.preloadingNextSong = true;
+            await firstValueFrom(this.preloadSong(nextSong));
+            nextSongSub.unsubscribe();
+          });
+      } else {
+        this.preloadingNextSong = false;
       }
     });
   }

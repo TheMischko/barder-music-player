@@ -1,13 +1,12 @@
-.controls{
+.controls {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-
-
 }
 
 :host ::ng-deep .controls {
-  ng-icon.controls-icon{
+  ng-icon.controls-icon,
+  app-loader ng-icon.medium {
     --ng-icon__size: 1.5rem !important;
   }
   button.circular {

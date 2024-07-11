@@ -18,8 +18,10 @@ export class ControlsComponent implements OnInit, OnDestroy {
 
   protected playPauseState: "songIsPlaying" | "songIsPaused" = "songIsPlaying";
   protected readonly LoopState = LoopState;
+  protected songIsLoading: boolean = false;
 
   private playbackStateSubscription: Subscription;
+  private songLoadingSubscription: Subscription;
 
   constructor(private playerService: PlayerService) {}
 
@@ -27,6 +29,12 @@ export class ControlsComponent implements OnInit, OnDestroy {
     this.playbackStateSubscription = this.playerService.playbackState$.subscribe(
       (playing) => {
         this.playPauseState = playing ? "songIsPlaying" : "songIsPaused";
+      },
+    );
+
+    this.songLoadingSubscription = this.playerService.songLoadingState$.subscribe(
+      (loading) => {
+        this.songIsLoading = loading;
       },
     );
   }
