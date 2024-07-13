@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { LoopState } from "../player.component.model";
-import { PlayerService } from "@services/player.service";
+import { PlayerService } from "@services/player-service/player.service";
 import { Subscription } from "rxjs";
 
 @Component({

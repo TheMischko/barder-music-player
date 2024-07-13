@@ -1,8 +1,8 @@
 import { TestBed } from "@angular/core/testing";
 import { PlayerService } from "./player.service";
-import { Song } from "../models/music";
+import { Song } from "../../models/music";
 import { PlaybackSettingsService } from "@services/playback-settings.service";
-import { HowlMock } from "../../tests/mocks/HowlMock";
+import { HowlMock } from "../../../tests/mocks/HowlMock";
 import { HowlOptions } from "howler";
 describe("PlayerService", () => {
   let service: PlayerService;

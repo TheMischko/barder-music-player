@@ -8,11 +8,13 @@ import {
   Observable,
   Subscription,
 } from "rxjs";
-import { LoopState } from "../player/player.component.model";
-import { Song } from "../models/music";
-import { ProgressService } from "../player/progress.service";
+import { LoopState } from "../../player/player.component.model";
+import { Song } from "../../models/music";
+import { ProgressService } from "../../player/progress.service";
 import { FileService } from "@services/file.service";
 import { QueueService } from "@services/queue.service";
+import { PreloadingState } from "@services/player-service/preloading-state";
+import { PreloadingStateManager } from "@services/player-service/preloading-state.manager";
 
 @Injectable({
   providedIn: "root",
@@ -25,8 +27,10 @@ export class PlayerService implements OnDestroy {
 
   private playingSong: Howl;
   private songIdHowlMapping: { [key: string]: Howl | null } = {};
-  private readonly progressCheckInterval = 250;
-  private readonly preloadTimePortion = 0.9;
+  private readonly PROGRESS_INTERVAL_CHECK = 250;
+  private readonly PRELOAD_TIME_PORTION = 0.9;
+  private readonly PRELOAD_MIN_SECONDS = 30;
+  private readonly PRELOAD_SONGS_COUNT = 3;
   private playingSongID: number;
   private isPlaying: boolean = false;
   private currentPlayingSongId: number | null = null;
@@ -36,7 +40,7 @@ export class PlayerService implements OnDestroy {
   private settingsSubscriptions: Subscription[] = [];
   private progressSubscription: Subscription;
   private readonly songSubscription: Subscription;
-  private preloadingNextSong: boolean = false;
+  private preloadStateManager: PreloadingStateManager;
 
   private songEventsAttached: boolean = false;
 
@@ -76,6 +80,12 @@ export class PlayerService implements OnDestroy {
         this.songEventsAttached = false;
         this.playSong(song).then((_) => {});
       }
+    });
+
+    this.preloadStateManager = new PreloadingStateManager();
+    this.preloadStateManager.unload.subscribe((oldSongId) => {
+      this.songIdHowlMapping[oldSongId]?.unload();
+      this.songIdHowlMapping[oldSongId] = undefined;
     });
   }
 
@@ -200,6 +210,7 @@ export class PlayerService implements OnDestroy {
     this.playingSong.stop();
     this.cleanAfterSongEnd();
     this.onEndPlaying.emit();
+    this.preloadSongsAhead(this.PRELOAD_SONGS_COUNT);
     this.queueService.playNextSong();
   }
 
@@ -224,6 +235,7 @@ export class PlayerService implements OnDestroy {
     if (!this.isPlaying) {
       this.isPlaying = true;
       this.playbackState.next(this.isPlaying);
+      this.preloadStateManager.changeState(song.id, PreloadingState.Completed);
     }
 
     this.currentPlayingSongId = song.id;
@@ -273,29 +285,25 @@ export class PlayerService implements OnDestroy {
   }
 
   private startProgressTracking() {
-    this.progressSubscription = interval(this.progressCheckInterval).subscribe(() => {
+    let preloaded = false;
+    this.progressSubscription = interval(this.PROGRESS_INTERVAL_CHECK).subscribe(() => {
       if (this.playingSong === undefined) {
         this.progressService.updatePlayedLengthMillis(0);
         return;
       }
       const position = (this.playingSong.seek() as number) * 1000;
       const duration = this.playingSong.duration() * 1000;
+      const remaining = duration - position;
 
       this.progressService.updatePlayedLengthMillis(position);
 
-      if (position / duration >= this.preloadTimePortion) {
-        const nextSongSub = this.queueService
-          .getNextSong$()
-          .subscribe(async (nextSong) => {
-            if (this.preloadingNextSong || this.songIdHowlMapping[nextSong.id] !== null) {
-              return;
-            }
-            this.preloadingNextSong = true;
-            await firstValueFrom(this.preloadSong(nextSong));
-            nextSongSub.unsubscribe();
-          });
-      } else {
-        this.preloadingNextSong = false;
+      const isPositionInPreloadStage =
+        position / duration >= this.PRELOAD_TIME_PORTION ||
+        remaining < this.PRELOAD_MIN_SECONDS;
+
+      if (!preloaded && isPositionInPreloadStage) {
+        this.preloadSongsAhead(this.PRELOAD_SONGS_COUNT);
+        preloaded = true;
       }
     });
   }
@@ -315,12 +323,27 @@ export class PlayerService implements OnDestroy {
 
   private preloadSong(song: Song): Observable<never> {
     return new Observable((observer) => {
+      if (this.songIdHowlMapping[song.id]) {
+        observer.next();
+        return observer.complete();
+      }
+      this.preloadStateManager.changeState(song.id, PreloadingState.InProgress);
+
       const songHowlSub = this.createHowl(song).subscribe((howl) => {
         this.songIdHowlMapping[song.id] = howl;
+        this.preloadStateManager.changeState(song.id, PreloadingState.Completed);
         observer.next();
         observer.complete();
         songHowlSub.unsubscribe();
       });
+    });
+  }
+
+  private preloadSongsAhead(numberOfSongs: number): void {
+    this.queueService.getNextSongs(numberOfSongs).forEach((song) => {
+      if (this.preloadStateManager.getState(song.id) !== PreloadingState.Completed) {
+        this.preloadSong(song).subscribe();
+      }
     });
   }
 
@@ -329,7 +352,6 @@ export class PlayerService implements OnDestroy {
     this.isPlaying = false;
     this.currentPlayingSongId = null;
     this.songEventsAttached = false;
-    this.preloadingNextSong = false;
   }
 
   createHowl(song: Song): Observable<Howl> {

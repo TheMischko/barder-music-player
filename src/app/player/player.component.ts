@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { PlayerService } from "@services/player.service";
+import { PlayerService } from "@services/player-service/player.service";
 import { PlaybackSettingsService } from "@services/playback-settings.service";
 import { Subscription } from "rxjs";
 import { Song } from "../models/music";

@@ -117,6 +117,16 @@ export class QueueService implements OnDestroy {
     return this.nextSong.asObservable();
   }
 
+  public getNextSongs(numberOfSongs: number): Song[] {
+    const songs = [];
+    let index = this.currentSongIndex;
+    while (songs.length < numberOfSongs) {
+      index = (index + 1) % this.playlist.length;
+      songs.push(this.playlist[index]);
+    }
+    return songs;
+  }
+
   public getPrevSong$(): Observable<Song | undefined> {
     return new Observable<Song | undefined>((observer) => {
       if (this.playedSongs.length === 0) {

@@ -25,7 +25,7 @@ import { NewSongData, Song } from "../../../models/music";
 import { ModalService } from "@services/modal.service";
 import { NewSongModalComponent } from "../../playlist-detail/new-song-modal/new-song-modal.component";
 import { ModalComponent } from "@shared/containers/modal/modal.component";
-import { PlayerService } from "@services/player.service";
+import { PlayerService } from "@services/player-service/player.service";
 import { QueueService } from "@services/queue.service";
 import { listen, UnlistenFn, Event } from "@tauri-apps/api/event";
 import { path as Path } from "@tauri-apps/api";
