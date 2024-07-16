@@ -1,6 +1,20 @@
-<app-card (click)="displayDetail()">
+<app-card (click)="displayDetail()" (mouseenter)="hover = true" (mouseleave)="hover = false">
   <div class="content-wrapper">
     <img [src]="playlist.coverImage" [alt]="playlist.name + 'image'" />
     <h3>{{ playlist.name }}</h3>
+    <app-button type="fill"
+                circular="true"
+                color="primary"
+                class="play-button"
+                [ngClass]="{'visible': hover || playing}"
+                (click)="handleClick($event)"
+    >
+      <ng-container *ngIf="!playing; else pause">
+        <ng-icon name="ionPlay"></ng-icon>
+      </ng-container>
+      <ng-template #pause>
+        <ng-icon name="ionPause"></ng-icon>
+      </ng-template>
+    </app-button>
   </div>
 </app-card>

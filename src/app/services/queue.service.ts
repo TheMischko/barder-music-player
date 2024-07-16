@@ -22,7 +22,7 @@ export class QueueService implements OnDestroy {
 
   private currentSong = new BehaviorSubject<Song | null>(null);
   private nextSong = new BehaviorSubject<Song | null>(null);
-  private _currentPlaylistId: number;
+  private _currentPlaylistId = new BehaviorSubject<number | null>(null);
 
   private loopChangeSubscription: Subscription;
   private loop: LoopState = LoopState.None;
@@ -41,8 +41,12 @@ export class QueueService implements OnDestroy {
     this.loopChangeSubscription.unsubscribe();
   }
 
-  public get currentPlaylistId(): number {
-    return this._currentPlaylistId;
+  public get currentPlaylistId(): number | null {
+    return this._currentPlaylistId.value;
+  }
+
+  public get currentPlaylistId$(): Observable<number>{
+    return this._currentPlaylistId.asObservable();
   }
 
   public setPlaylist(playlistId: number, args?: SetPlaylistArgs): Observable<Song[]> {
@@ -63,9 +67,11 @@ export class QueueService implements OnDestroy {
 
         observer.next(this.playlist);
         observer.complete();
+        return;
       }
-      this.getSongsOfPlaylist(playlistId).then(async (songs: Song[]) => {
-        this._currentPlaylistId = playlistId;
+
+      this.getSongsOfPlaylistWithRetry(playlistId).then(async (songs: Song[]) => {
+        this._currentPlaylistId.next(playlistId);
         if (args?.includeChildren) {
           const playlists = await firstValueFrom(
             this.playlistService.getChildrenPlaylists$(playlistId),
@@ -185,6 +191,22 @@ export class QueueService implements OnDestroy {
 
   private async getSongsOfPlaylist(playlistId: number): Promise<Song[]> {
     return await firstValueFrom(this.songService.getSongsForPlaylist(playlistId));
+  }
+
+  private getSongsOfPlaylistWithRetry(playlistId: number, maxRetries: number = 3, delayMs: number = 1000, attempt: number = 1): Promise<Song[]> {
+    return new Promise((resolve, reject) => {
+      this.songService.getSongsForPlaylist(playlistId).subscribe(songs => {
+        if (songs.length > 0 || attempt >= maxRetries) {
+          resolve(songs);
+        } else {
+          setTimeout(() => {
+            this.getSongsOfPlaylistWithRetry(playlistId, maxRetries, delayMs, attempt + 1)
+              .then(resolve)
+              .catch(reject);
+          }, delayMs);
+        }
+      }, error => reject(error));
+    });
   }
 
   private shuffleArray<T>(array: T[]): T[] {

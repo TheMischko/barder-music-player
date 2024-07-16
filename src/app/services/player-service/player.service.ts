@@ -229,7 +229,7 @@ export class PlayerService implements OnDestroy {
   }
 
   private async playSong(song: Song) {
-    if (this.currentPlayingSongId === song.id && this.isPlaying) {
+    if (this.currentPlayingSongId === song?.id && this.isPlaying) {
       return;
     }
     if (!this.isPlaying) {
