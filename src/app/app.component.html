@@ -1,8 +1,13 @@
 <div class="layout">
-    <div class="sidebar"></div>
-    <div class="main">
-        <router-outlet></router-outlet>
+  <div class="sidebar">
+    <div class="fill-sidebar">
+      <router-outlet name="sidebar"></router-outlet>
     </div>
+    <app-sidebar-menu></app-sidebar-menu>
+  </div>
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
 </div>
 
 <app-player></app-player>

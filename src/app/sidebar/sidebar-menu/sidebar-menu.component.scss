@@ -1,0 +1,16 @@
+@import "../../../scss/colors";
+@import "../../../scss/variables";
+
+.tools {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  background-color: $color-grey-850;
+  color: $color-grey-100;
+  padding: 0.5rem;
+  border-radius: 0 0 $border-radius $border-radius;
+}
+
+:host .tools ng-icon {
+  --ng-icon__size: 2rem !important;
+}

@@ -9,6 +9,7 @@ import { heroPlaySolid } from "@ng-icons/heroicons/solid";
 import {PlayerModule} from "./player/player.module";
 import {PlaylistModule} from "./playlist/playlist.module";
 import {routes} from "./app.routes";
+import { SidebarModule } from "./sidebar/sidebar.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,9 +20,10 @@ import {routes} from "./app.routes";
     RouterOutlet,
     SharedModule,
     NgIcon,
-    NgIconsModule.withIcons({heroPlaySolid, }),
+    NgIconsModule.withIcons({ heroPlaySolid }),
     PlayerModule,
-    PlaylistModule
+    PlaylistModule,
+    SidebarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
