@@ -1,0 +1,13 @@
+<app-base-modal>
+  <h1>{{ title }}</h1>
+  <p>{{ message }}</p>
+  <div class="row button-row">
+    <app-button type="fill" color="primary" (click)="confirm()">
+      Confirm
+    </app-button>
+
+    <app-button type="fill" color="danger" (click)="cancel()">
+      Cancel
+    </app-button>
+  </div>
+</app-base-modal>

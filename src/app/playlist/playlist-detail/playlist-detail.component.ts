@@ -55,12 +55,12 @@ export class PlaylistDetailComponent implements OnInit, OnDestroy {
   }
 
   openNewPlaylistModal() {
-    const modal: ModalComponent<CreatePlaylistData> = this.modalService.open(
+    const modal= this.modalService.open(
       CreatePlaylistModalComponent,
       {
         playlistParentId: this.id,
       },
-    );
+    ) as CreatePlaylistModalComponent;
     this.subscriptions.push(
       modal.closed.subscribe((playlist: CreatePlaylistData) => {
         this.playlistService.addPlaylist(playlist);

@@ -16,6 +16,7 @@ import { ionChevronDownSharp } from "@ng-icons/ionicons";
 import { FileSelectComponent } from "./controls/file-select/file-select.component";
 import { LoaderComponent } from "./loader/loader.component";
 import { featherLoader } from "@ng-icons/feather-icons";
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { featherLoader } from "@ng-icons/feather-icons";
     CollapsibleContainerComponent,
     FileSelectComponent,
     LoaderComponent,
+    ConfirmModalComponent,
   ],
   exports: [
     ButtonComponent,

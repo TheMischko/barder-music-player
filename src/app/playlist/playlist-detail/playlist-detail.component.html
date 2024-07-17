@@ -13,7 +13,18 @@
         <a [routerLink]="['/playlist', parent.id]">{{ parent.name }}</a>
       </div>
     </div>
+
     <h1>{{ playlist?.name ?? "Playlist" }}</h1>
+
+    <div class="controls">
+      <app-button type="fill" color="primary">
+        Edit
+      </app-button>
+
+      <app-button type="fill" color="danger">
+        Delete
+      </app-button>
+    </div>
   </div>
   <div class="page-content">
     <app-collapsible-container title="Playlists">

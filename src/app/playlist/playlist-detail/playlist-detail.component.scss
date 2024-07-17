@@ -58,3 +58,11 @@
   flex-wrap: wrap;
   max-width: 33%;
 }
+
+.controls{
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}

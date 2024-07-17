@@ -24,15 +24,15 @@ export class ModalService {
   }
 
   constructor() {}
-  open<T extends ModalComponent<R>, R>(
+  open<T extends ModalComponent<K>, K>(
     modalComponent: Type<T>,
-    inputs?: Partial<T>,
-  ): ModalComponent<R> {
+    inputs?: Partial<InstanceType<T>>,
+  ): T {
     this.modal = this.viewContainerRef.createComponent(modalComponent);
     Object.assign(this.modal.instance, inputs);
     this.modal.instance.open();
     this.modal.instance.closed.subscribe((_) => this.closeModal());
-    return this.modal.instance;
+    return this.modal.instance as T;
   }
 
   public setRootViewContainerRef(viewContainerRef: ViewContainerRef): void {
