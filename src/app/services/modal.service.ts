@@ -1,9 +1,4 @@
-import {
-  ComponentRef,
-  Injectable,
-  Type,
-  ViewContainerRef,
-} from "@angular/core";
+import { ComponentRef, Injectable, Type, ViewContainerRef } from "@angular/core";
 import { ModalComponent } from "@shared/containers/modal/modal.component";
 import { Subscription } from "rxjs";
 
@@ -24,10 +19,7 @@ export class ModalService {
   }
 
   constructor() {}
-  open<T extends ModalComponent<K>, K>(
-    modalComponent: Type<T>,
-    inputs?: Partial<InstanceType<T>>,
-  ): T {
+  open<T extends ModalComponent<K>, K>(modalComponent: Type<T>, inputs?: Partial<T>): T {
     this.modal = this.viewContainerRef.createComponent(modalComponent);
     Object.assign(this.modal.instance, inputs);
     this.modal.instance.open();
