@@ -1,15 +1,8 @@
 use diesel::prelude::*;
+use diesel::RunQueryDsl;
 use crate::models::Playlist;
-use crate::schema::playlists::dsl::{playlists, id};
-use serde::Deserialize;
-
-#[derive(Insertable, Deserialize)]
-#[diesel(table_name = crate::schema::playlists)]
-pub struct NewPlaylist {
-    pub name: String,
-    pub coverImage: String,
-    pub parentID: Option<i32>,
-}
+use crate::schema::playlists::dsl::{id, playlists};
+use crate::playlist::{NewPlaylist};
 
 pub fn create_playlist(connection: &mut SqliteConnection, new_playlist: NewPlaylist) -> QueryResult<Playlist> {
     use crate::schema::playlists::dsl::*;

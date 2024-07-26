@@ -1,17 +1,9 @@
 use diesel::prelude::*;
+use diesel::{QueryResult, SqliteConnection};
 use crate::models::Song;
 use crate::schema::songs::dsl::{songs, id, orderInPlaylist, playlistID};
 use serde::Deserialize;
-
-#[derive(Insertable, Deserialize)]
-#[diesel(table_name = crate::schema::songs)]
-pub struct NewSong {
-    pub name: String,
-    pub filePath: String,
-    pub duration: i32,
-    pub playlistID: Option<i32>,
-    pub orderInPlaylist: Option<i32>,
-}
+use crate::song::NewSong;
 
 pub fn create_song(connection: &mut SqliteConnection, new_song: NewSong) -> QueryResult<Song> {
     use crate::schema::songs::dsl::*;
