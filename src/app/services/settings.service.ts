@@ -17,6 +17,12 @@ export class SettingsService {
     return this.set("discord-token", newToken);
   }
 
+  loginDiscord(token: string): Observable<void> {
+    return this.tauriService.invokeCommand("discord_connect", {
+      token,
+    });
+  }
+
   public get(key: string): Observable<string> {
     return this.tauriService
       .invokeCommand("read_settings", {

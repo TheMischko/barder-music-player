@@ -33,4 +33,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
+
+  loginDiscord() {
+    this.settings.loginDiscord(this.tokenControl.value).subscribe((response) => {});
+  }
 }

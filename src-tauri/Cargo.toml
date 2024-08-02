@@ -20,6 +20,8 @@ diesel_migrations = "2.2.0"
 dirs = "5.0.1"
 libsqlite3-sys = { version = "0.28.0", features = ["bundled"] }
 chrono = { version = "0.4", features = ["serde"] }
+serenity = "0.12"
+tokio = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

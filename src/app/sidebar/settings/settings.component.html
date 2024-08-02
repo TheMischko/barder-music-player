@@ -2,6 +2,6 @@
   <h1>Settings</h1>
   <app-collapsible-container title="Discord">
     <app-text-input [formControl]="tokenControl" label="Discord token"></app-text-input>
-    <app-button color="primary" type="fill">Login</app-button>
+    <app-button color="primary" type="fill" (click)="loginDiscord()">Login</app-button>
   </app-collapsible-container>
 </div>

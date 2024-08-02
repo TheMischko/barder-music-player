@@ -7,11 +7,13 @@ mod schema;
 mod song;
 mod playlist;
 mod settings;
+mod discord;
 
 use tauri::generate_handler;
 use crate::playlist::playlist_commands::{get_all_playlists, create_playlist};
 use crate::song::song_commands::{get_songs, create_song};
 use crate::settings::settings_commands::{read_settings, write_settings};
+use crate::discord::discord_commands::discord_connect;
 
 fn main() {
     tauri::Builder::default()
@@ -31,6 +33,7 @@ fn all_handlers() -> impl Fn(tauri::Invoke) + Clone {
         get_songs,
         create_song,
         read_settings,
-        write_settings
+        write_settings,
+        discord_connect
     ]
 }

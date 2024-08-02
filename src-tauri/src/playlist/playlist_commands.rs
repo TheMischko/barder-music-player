@@ -1,7 +1,5 @@
-use tauri::{generate_handler};
 use crate::db::establish_db_connection;
 use crate::models::Playlist;
-use crate::playlist;
 use crate::playlist::{NewPlaylist, playlist_manager};
 use crate::playlist::playlist_manager::{load_all_playlists};
 
