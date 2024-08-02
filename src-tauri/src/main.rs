@@ -6,10 +6,12 @@ mod models;
 mod schema;
 mod song;
 mod playlist;
+mod settings;
 
 use tauri::generate_handler;
 use crate::playlist::playlist_commands::{get_all_playlists, create_playlist};
 use crate::song::song_commands::{get_songs, create_song};
+use crate::settings::settings_commands::{read_settings, write_settings};
 
 fn main() {
     tauri::Builder::default()
@@ -27,6 +29,8 @@ fn all_handlers() -> impl Fn(tauri::Invoke) + Clone {
         get_all_playlists,
         create_playlist,
         get_songs,
-        create_song
+        create_song,
+        read_settings,
+        write_settings
     ]
 }

@@ -31,7 +31,7 @@ export type TextInputType =
 })
 export class TextInputComponent implements ControlValueAccessor, OnInit {
   @Input() label: string;
-  @Input() placeholder: string;
+  @Input() placeholder: string = "";
   @Input() type: TextInputType = "text";
 
   value: string = "";
