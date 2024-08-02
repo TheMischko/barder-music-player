@@ -7,20 +7,22 @@ import { SharedModule } from "@shared/shared.module";
 import { NgIcon, NgIconsModule } from "@ng-icons/core";
 import { ionHomeSharp, ionSettingsSharp } from "@ng-icons/ionicons";
 import { SettingsComponent } from "./settings/settings.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
   {
+    path: "",
+    redirectTo: "home",
+    pathMatch: "full",
+  },
+  {
     path: "home",
     component: QuickAccessComponent,
+    outlet: "sidebar",
   },
   {
     path: "settings",
     component: SettingsComponent,
-  },
-  {
-    path: "",
-    redirectTo: "/home",
-    pathMatch: "full",
   },
 ];
 
@@ -28,10 +30,18 @@ const routes: Routes = [
   declarations: [QuickAccessComponent, SidebarMenuComponent, SettingsComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(
+      routes.map((route) => {
+        return {
+          ...route,
+          outlet: "sidebar",
+        };
+      }),
+    ),
     SharedModule,
     NgIcon,
     NgIconsModule.withIcons({ ionSettingsSharp, ionHomeSharp }),
+    ReactiveFormsModule,
   ],
   exports: [SidebarMenuComponent],
 })
